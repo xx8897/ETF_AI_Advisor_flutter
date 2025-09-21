@@ -3,9 +3,9 @@ import pandas as pd
 import json
 from dotenv import load_dotenv
 from langchain_openai import OpenAIEmbeddings
-from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain_community.vectorstores import Chroma
 from langchain.docstore.document import Document
+import chromadb
+from chromadb.utils import embedding_functions
 
 # --- 1. 環境設定 (Environment Setup) ---
 def setup_environment():
@@ -24,33 +24,9 @@ def load_data():
     """
     從 CSV 和 JSON 檔案中載入 ETF 資料。
     """
-    static_df = None
-    dynamic_data = None
-
-    try:
-        static_df = pd.read_csv('etf_static_data.csv')
-        print("靜態資料 etf_static_data.csv 載入成功。")
-    except FileNotFoundError:
-        print(f"錯誤：找不到靜態資料檔案 etf_static_data.csv。")
-        return None, None
-    except Exception as e:
-        print(f"讀取 etf_static_data.csv 時發生錯誤: {e}")
-        return None, None
-
-    try:
-        with open('etf_dynamic_data.json', 'r', encoding='utf-8') as f:
-            dynamic_data = json.load(f)
-        print("動態資料 etf_dynamic_data.json 載入成功。")
-    except FileNotFoundError:
-        print(f"錯誤：找不到動態資料檔案 etf_dynamic_data.json。")
-        return None, None
-    except json.JSONDecodeError as e:
-        print(f"解析 etf_dynamic_data.json 時發生錯誤: {e}")
-        return None, None
-    except Exception as e:
-        print(f"讀取 etf_dynamic_data.json 時發生錯誤: {e}")
-        return None, None
-
+    static_df = pd.read_csv('etf_static_data.csv')
+    with open('etf_dynamic_data.json', 'r', encoding='utf-8') as f:
+        dynamic_data = json.load(f)
     print("靜態與動態資料載入成功。")
     return static_df, dynamic_data
 
@@ -58,17 +34,12 @@ def load_data():
 def create_documents(static_df, dynamic_data):
     """
     將靜態和動態資料整合成 LangChain 的 Document 物件。
-    每個 Document 代表一檔 ETF 的完整資訊。
     """
     all_documents = []
     for index, row in static_df.iterrows():
-        etf_code = row['etf_code']
-        # 確保 ETF 代號是字串且格式正確 (例如 0050)
-        etf_code_str = f"{etf_code:04}" if isinstance(etf_code, int) else str(etf_code)
-
+        # Handle both numeric and alphanumeric ETF codes robustly
+        etf_code_str = str(row['etf_code'])
         dynamic_info = dynamic_data.get(etf_code_str, {})
-        
-        # 組合文字內容，使其豐富且易於搜尋
         content = f"""
         ETF 代號: {etf_code_str}
         ETF 名稱: {row['etf_name']}
@@ -81,8 +52,6 @@ def create_documents(static_df, dynamic_data):
         近期績效: 一個月 {dynamic_info.get('performance', {}).get('1m', 'N/A')}%, 三個月 {dynamic_info.get('performance', {}).get('3m', 'N/A')}%, 一年 {dynamic_info.get('performance', {}).get('1y', 'N/A')}% 
         前十大成分股: {", ".join([f'{h["name"]} ({h["weight"]})' for h in dynamic_info.get('top_10_holdings', [])])}
         """
-        
-        # 建立 Document 物件
         doc = Document(
             page_content=content.strip(),
             metadata={
@@ -92,48 +61,61 @@ def create_documents(static_df, dynamic_data):
             }
         )
         all_documents.append(doc)
-    
     print(f"成功為 {len(all_documents)} 檔 ETF 建立 Document 物件。")
     return all_documents
 
 # --- 4. 向量化與儲存 (Vectorization & Storage) ---
 def build_and_store_vectors(documents, api_key):
     """
-    將 Documents 進行向量化並存入 ChromaDB。
+    透過 HTTP Client 連接到一個正在運行的 ChromaDB 伺服器，
+    並將 Documents 進行向量化並存入。
     """
     if not documents:
         print("沒有可處理的 Documents，程序中止。")
         return
 
-    # 初始化 Embedding 模型
-    embeddings = OpenAIEmbeddings(api_key=api_key, model="text-embedding-3-small")
-    
-    # 定義向量資料庫的路徑
-    persist_directory = 'chroma_db'
-    
-    # 建立 ChromaDB 並存入向量
-    # from_documents 會自動處理 chunking 和 embedding
-    print("開始建立向量資料庫，可能需要一些時間...")
-    vectordb = Chroma.from_documents(
-        documents=documents,
-        embedding=embeddings,
-        persist_directory=persist_directory
+    # 初始化 ChromaDB HttpClient，連接到正在運行的伺服器
+    print("正在連接到 ChromaDB 伺服器 (http://localhost:8000)...")
+    client = chromadb.HttpClient(host='localhost', port=8000)
+
+    # 檢查 Collection 是否已存在，若存在則刪除，確保每次都是全新建立
+    try:
+        print("正在刪除舊的 'etf_collection' (如果存在)...")
+        client.delete_collection(name="etf_collection")
+        print("舊的 Collection 已成功刪除。")
+    except Exception as e:
+        print(f"刪除舊 Collection 時發生錯誤 (可能是因為它不存在，這很正常): {e}")
+
+
+    # 建立 OpenAI Embedding Function
+    openai_ef = embedding_functions.OpenAIEmbeddingFunction(
+        api_key=api_key,
+        model_name="text-embedding-3-small"
+    )
+
+    # 建立一個新的 Collection
+    print("正在建立新的 'etf_collection'...")
+    collection = client.create_collection(
+        name="etf_collection",
+        embedding_function=openai_ef
+    )
+
+    # 將所有文件一次性加入 Collection
+    print(f"正在將 {len(documents)} 份文件加入 Collection...")
+    collection.add(
+        ids=[doc.metadata['etf_code'] for doc in documents],
+        documents=[doc.page_content for doc in documents],
+        metadatas=[doc.metadata for doc in documents]
     )
     
-    # 持久化資料庫
-    vectordb.persist()
-    print(f"向量資料庫建立完成並已存放在 '{persist_directory}' 資料夾。")
+    print(f"向量資料庫建立完成。所有資料已成功寫入 'etf_collection'。")
 
 # --- 主執行流程 ---
 if __name__ == "__main__":
     print("開始執行 RAG 核心引擎開發 - 步驟 1: 建立向量資料庫")
-    
     api_key = setup_environment()
-    
     if api_key:
         static_df, dynamic_data = load_data()
-        if static_df is not None and dynamic_data is not None:
-            documents = create_documents(static_df, dynamic_data)
-            build_and_store_vectors(documents, api_key)
-            
+        documents = create_documents(static_df, dynamic_data)
+        build_and_store_vectors(documents, api_key)
     print("任務完成！")

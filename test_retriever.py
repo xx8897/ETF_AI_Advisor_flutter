@@ -27,12 +27,19 @@ def main():
         vectordb = Chroma(persist_directory=persist_directory, embedding_function=embeddings)
         print(f"3. 從 '{persist_directory}' 載入向量資料庫成功。")
 
-        # 4. 定義查詢並執行相似度搜尋
+        # 4. 定義查詢並生成 Embedding
         query = "我想找跟AI或半導體相關的ETF"
         print(f"\n4. 執行查詢: '{query}'")
         
-        # k=5 表示我們希望找到最相關的 5 個文件
-        similar_docs = vectordb.similarity_search(query, k=5)
+        # 手動生成 Embedding 並印出
+        embedding_vector = embeddings.embed_query(query)
+        print("\n--- LangChain 生成的 Embedding Vector (前10個維度預覽) ---")
+        print(embedding_vector[:10])
+        print(f"總維度: {len(embedding_vector)}")
+        print("-" * 20)
+
+        # 使用向量進行相似度搜尋
+        similar_docs = vectordb.similarity_search_by_vector(embedding_vector, k=5)
         
         # 5. 打印結果
         print("\n5. 檢索結果：")
