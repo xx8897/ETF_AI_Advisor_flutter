@@ -119,7 +119,7 @@ This document tracks significant changes, feature additions, and bug fixes appli
 -   **Phase 3 Kick-off**: Officially started the Flutter frontend development phase.
 -   **UI Implementation**: Created the initial user interface in Flutter.
 -   **Frontend-Backend Integration**: Implemented the `http` call from the Flutter app to the Dart backend.
--   **CORS Resolution**: Successfully diagnosed and resolved a critical CORS preflight request issue by implementing a global middleware in the Dart Frog backend.
+-   **CORS Resolution**: Successfully diagnosed and resolved a critical CORS preflight request issue.
 -   **SUCCESS**: Achieved a full end-to-end connection from the Flutter frontend to the Dart backend.
 
 ---
@@ -129,16 +129,26 @@ This document tracks significant changes, feature additions, and bug fixes appli
 **Files Changed**: `etf_advisor_frontend/lib/main.dart`, `etf_advisor_frontend/pubspec.yaml`
 
 **Description**:
--   **State Management**: Integrated the `provider` package to manage the application's theme state.
--   **Theming Engine**:
-    -   Implemented a robust light/dark mode switching functionality.
-    -   Designed and implemented a custom, VS Code-inspired dark theme with a professional color palette (purple, orange, deep grays) and gradient effects.
-    -   Refined the light theme with a blue and orange color scheme.
-    -   Set the light theme as the default on application startup as per user request.
--   **UI Refinement**:
-    -   Removed the "debug" banner.
-    -   Increased the size and prominence of titles for better visual hierarchy.
-    -   Refined the layout using Cards and a Floating Action Button to create a more polished and modern user experience.
--   **Bug Fix**: Corrected a `CardTheme` vs `CardThemeData` type mismatch error.
--   **Final State**: The Flutter application has reached its initial design and functionality milestone, providing a polished and user-friendly interface for the AI advisor.
+-   **State Management**: Integrated the `provider` package.
+-   **Theming Engine**: Implemented a robust light/dark mode switching functionality and a custom, VS Code-inspired dark theme.
+-   **UI Refinement**: Refined the layout using Cards and a Floating Action Button.
+-   **Bug Fix**: Corrected a `CardTheme` vs `CardThemeData` type mismatch.
+
+---
+
+### **Update: 2025-09-21 (Feature Enhancement & Refactoring)**
+**Author**: Flutter UI/UX Engineer, System Architect, Dart Backend Engineer
+**Files Created/Changed**: `etf_advisor_frontend/lib/**`, `dart_backend/routes/etf_details/[etf_code].dart`
+
+**Description**:
+-   **Feature: Pie Chart Visualization**:
+    -   Integrated the `fl_chart` package into the Flutter frontend.
+    -   Successfully implemented a `PortfolioPieChart` widget.
+-   **Feature: Detailed ETF View (Backend)**:
+    -   Created a new dynamic API endpoint (`/etf_details/{etf_code}`) in the Dart backend.
+-   **Architectural Refactoring (Frontend)**:
+    -   The Flutter frontend codebase was significantly refactored for better organization and maintainability, creating a clean directory structure (`providers`, `screens`, `widgets`).
+-   **Bug Fixes**:
+    -   Corrected a multi-line string syntax error in the pie chart's title.
+-   **Final State**: The Flutter application is now more feature-rich and has a more robust and scalable architecture.
 ---
