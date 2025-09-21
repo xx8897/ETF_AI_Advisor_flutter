@@ -1,58 +1,84 @@
-# Project Log & Feature Changelog
+# 專案日誌 & 功能變更紀錄
 
-This document serves as the official record for the project's major features, historical milestones, and core technical decisions.
-
----
-
-## 1. Project Summary (as of Python Implementation Completion)
-
-The project's core Python-based functionalities were fully developed and operational. The application successfully integrated a RAG (Retrieval-Augmented Generation) pipeline to provide AI-driven ETF investment advice through a Streamlit web interface. All foundational data, vector databases, and core AI logic were completed, with the primary challenge being local environment setup for end-users.
+本文件為專案的官方紀錄，記載了主要功能、歷史里程碑與核心技術決策。
 
 ---
 
-## 2. Feature Changelog
+## 1. 當前開發階段：v2.0 核心功能進化
 
-*(This section will be updated only when a core feature is added, modified, or removed.)*
+**狀態**: 🚧 **進行中**
 
--   **[2025-09-21]**: **Flutter Prototype v1.0 Completed**.
-    -   **Feature**: Successfully migrated the entire backend logic to a high-performance Dart server.
-    -   **Feature**: Developed a fully functional Flutter frontend that is end-to-end connected to the backend.
-    -   **Feature**: Implemented a polished, themeable user interface with both light and dark modes, inspired by professional development tools.
-    -   **Modification**: The project has transitioned from a Python-only proof-of-concept to a robust, cross-platform application foundation.
--   **[YYYY-MM-DD]**: Initial project setup.
+### **核心策略：整合至單一事實來源 (Single Source of Truth)**
+
+經過多次的技術探勘與策略迭代，團隊最終在用戶的協助下，將資料來源整合為一個單一、權威的 Excel 檔案 (`etf.xlsx`)。此檔案包含了 ETF 的完整列表、詳細的因子數據以及成分股資訊。
+
+這個決策取代了所有先前關於多來源 API（TWSE, FinMind）與網頁爬蟲的複雜策略，大幅簡化了資料導入流程，並確保了資料的高度一致性與可靠性。
+
+**下一步行動**:
+1.  **資料庫建立**: 使用 `etf.xlsx` 檔案，建立最終的 ChromaDB 向量資料庫。
+2.  **後端整合**: Dart 後端將直接與此資料庫互動，以生成投資建議。
 
 ---
 
-## 3. Project History & Core Technical Deep Dive
+## 2. 專案摘要 (完成 Python 實作階段)
 
-This section contains a narrative of the development process, challenges encountered, and detailed explanations of the core technologies implemented.
+專案的核心 Python 功能已全面開發並可運作。應用程式成功地整合了 RAG (檢索增強生成) 流程，透過 Streamlit 網頁介面提供由 AI 驅動的 ETF 投資建議。所有基礎資料、向量資料庫和核心 AI 邏輯均已完成，當時的主要挑戰是為終端使用者進行本地環境設定。
 
-### 3.1. Initial State & Python Implementation
+---
 
-The project was initially built with a Python stack:
--   **Frontend**: Streamlit (`app.py`) for rapid UI development.
--   **Backend Logic**: A core RAG pipeline (`core_logic.py`).
--   **Database**: ChromaDB (`chroma_db/`) for vector storage and retrieval.
--   **AI Core**: The system dynamically generates investment reports, including asset allocation, based on user-selected themes, powered by OpenAI's GPT-4o model.
+## 3. 功能變更日誌
 
-### 3.2. Technical Challenge: Environment PATH Resolution
+*(本章節僅在核心功能被新增、修改或移除時更新。)*
 
-During the initial deployment phase, a significant challenge was the system's inability to locate the `streamlit` executable. This was traced to `pip` installing packages in a user-level `Scripts` directory that was not part of the system's `PATH` environment variable.
+-   **[2025-09-21]**: **Flutter 原型 v1.0 完成**
+    -   **功能**: 成功將所有後端邏輯遷移至一個高效能的 Dart 伺服器。
+    -   **功能**: 開發了一個功能完整的 Flutter 前端，並已與後端進行端對端連接。
+    -   **功能**: 實作了一個精緻的、支援主題切換（淺色/深色模式）的使用者介面，其設計靈感來自專業的開發工具。
+    -   **修改**: 專案已從一個純 Python 的概念驗證，轉型為一個穩健的、跨平台的應用程式基礎。
+-   **[YYYY-MM-DD]**: 初始專案設定。
 
-**Resolution**:
-The user-level `Scripts` path (`C:\Users\xx8897\AppData\Roaming\Python\Python313\Scripts`) was identified using `python -m site` and manually added to the system's `PATH`, resolving the issue for future terminal sessions.
+---
 
-### 3.3. Core Technology Explained: How Asset Allocation is Calculated
+## 4. 專案歷史 & 核心技術詳解
 
-A key feature of this project is the dynamic calculation of asset **allocation percentages**. This is not achieved through hard-coded formulas but is delegated to the Large Language Model (LLM).
+本章節以敘事方式記錄了開發過程、遇到的挑戰，以及對所實作核心技術的詳細解釋。
 
-**RAG Workflow**:
-1.  **User Input**: The user selects investment themes (e.g., "High Dividend").
-2.  **Retrieval**: The system performs a similarity search in the Chroma vector database to find the most relevant ETF data based on the user's themes.
-3.  **Prompt Engineering**: The retrieved data is combined with a carefully crafted prompt that instructs the LLM to act as a professional financial advisor.
-4.  **LLM Decision-Making**: The LLM is tasked to:
-    -   Select 2-3 of the most suitable ETFs from the provided data.
-    -   **Determine the investment allocation for each ETF**, ensuring the total sums to 100%. The LLM simulates expert considerations like risk balancing and thematic relevance.
-5.  **Structured Output**: The final analysis is returned in a strict JSON format, ready for frontend rendering.
+### 4.1. 初始狀態 & Python 實作
 
-This entire process is dependent on a valid `OPENAI_API_KEY` being present in the `.env` file.
+專案最初使用 Python 技術棧建構：
+-   **前端**: Streamlit (`app.py`) 用於快速 UI 開發。
+-   **後端邏輯**: 核心的 RAG 流程 (`core_logic.py`)。
+-   **資料庫**: ChromaDB (`chroma_db/`) 用於向量儲存與檢索。
+-   **AI 核心**: 系統根據使用者選擇的主題，動態生成包含資產配置的投資報告，由 OpenAI 的 GPT-4o 模型驅動。
+
+### 4.2. 技術挑戰：環境 PATH 解析
+
+在初期的部署階段，一個顯著的挑戰是系統無法找到 `streamlit` 執行檔。這被追溯到 `pip` 將套件安裝在一個未包含於系統 `PATH` 環境變數中的使用者級別 `Scripts` 目錄。
+
+**解決方案**:
+使用 `python -m site` 找到了使用者級別的 `Scripts` 路徑 (`C:\Users\xx8897\AppData\Roaming\Python\Python313\Scripts`)，並手動將其加入系統的 `PATH` 中，為後續的終端機工作階段解決了此問題。
+
+### 4.3. 核心技術解析：資產配置比例是如何計算的
+
+本專案的一個關鍵特色是資產**配置百分比**的動態計算。這並非透過寫死的公式達成，而是全權委託給大型語言模型 (LLM)。
+
+**RAG 工作流程**:
+1.  **使用者輸入**: 使用者選擇投資主題 (例如 "高股息")。
+2.  **檢索**: 系統在 Chroma 向量資料庫中進行相似性搜尋，根據使用者主題找到最相關的 ETF 資料。
+3.  **提示工程 (Prompt Engineering)**: 將檢索到的資料與一個精心設計的提示結合，該提示指示 LLM 扮演專業財務顧問的角色。
+4.  **LLM 決策**: LLM 被賦予以下任務：
+    -   從提供的資料中，挑選 2-3 檔最適合的 ETF。
+    -   **決定每檔 ETF 的投資配置比例**，並確保總和為 100%。LLM 會模擬專家考量，如風險平衡與主題相關性。
+5.  **結構化輸出**: 最終的分析以嚴格的 JSON 格式回傳，以便前端進行渲染。
+
+整個流程依賴於 `.env` 檔案中存在一個有效的 `OPENAI_API_KEY`。
+
+### 4.4. 核心技術解析：RAG 的資料來源演進
+
+專案的 RAG (檢索增強生成) 流程，其核心資料來源經歷了多次迭代，最終整合為一個單一、權威的本地檔案：
+
+1.  **資料擷取 (Data Ingestion)**: 所有 ETF 的相關數據（基本資料、量化因子、完整成分股等）均來自於專案內的 `etf.xlsx` 檔案。
+2.  **資料處理與向量化 (Data Processing & Vectorization)**: `scripts/build_vector_db.py` 腳本負責讀取此 Excel 檔案，將每一檔 ETF 的所有資訊整合成一段豐富的文字描述。
+3.  **向量儲存**: 這些豐富的文字描述隨後被 OpenAI 的 Embedding 模型轉換為高維度向量，並儲存在本地的 ChromaDB 向量資料庫中。
+
+這個策略確保了 RAG 模型的知識庫是基於一份全面且一致的「精華資料版本」，為生成高品質的投資建議提供了堅實的基礎。

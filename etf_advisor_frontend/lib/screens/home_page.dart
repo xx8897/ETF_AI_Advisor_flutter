@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import '../widgets/portfolio_pie_chart.dart';
+import '../widgets/etf_details_dialog.dart';
 import '../providers/theme_provider.dart';
 
 class AdvisorHomePage extends StatefulWidget {
@@ -21,6 +22,7 @@ class _AdvisorHomePageState extends State<AdvisorHomePage> {
   bool _isLoading = false;
   String? _errorMessage;
   Map<String, dynamic>? _report;
+  List<Map<String, dynamic>>? _aggregatedHoldings;
 
   void _onThemeSelected(bool selected, String themeName) {
     setState(() {
@@ -37,23 +39,39 @@ class _AdvisorHomePageState extends State<AdvisorHomePage> {
       _isLoading = true;
       _errorMessage = null;
       _report = null;
+      _aggregatedHoldings = null; // Clear previous results
     });
 
     try {
-      final response = await http.post(
+      // 1. Get AI recommendation
+      final recommendResponse = await http.post(
         Uri.parse('http://localhost:8080/recommend'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({'themes': _selectedThemes.toList()}),
       );
 
-      if (response.statusCode == 200) {
-        setState(() {
-          _report = jsonDecode(utf8.decode(response.bodyBytes));
-        });
+      if (recommendResponse.statusCode == 200) {
+        final report = jsonDecode(utf8.decode(recommendResponse.bodyBytes));
+        final portfolio = (report['report']['portfolio'] as List).cast<Map<String, dynamic>>();
+
+        // 2. Get aggregated holdings for the recommended portfolio
+        final holdingsResponse = await http.post(
+          Uri.parse('http://localhost:8080/portfolio_holdings'),
+          headers: {'Content-Type': 'application/json'},
+          body: jsonEncode({'portfolio': portfolio}),
+        );
+
+        if (holdingsResponse.statusCode == 200) {
+          final holdingsData = jsonDecode(utf8.decode(holdingsResponse.bodyBytes));
+          setState(() {
+            _report = report;
+            _aggregatedHoldings = (holdingsData['portfolio_holdings'] as List).cast<Map<String, dynamic>>();
+          });
+        } else {
+          throw Exception('Failed to load aggregated holdings: ${holdingsResponse.statusCode}');
+        }
       } else {
-        setState(() {
-          _errorMessage = 'Error: ${response.statusCode}\n${response.body}';
-        });
+        throw Exception('Failed to get recommendation: ${recommendResponse.statusCode}\n${recommendResponse.body}');
       }
     } catch (e) {
       setState(() {
@@ -63,6 +81,43 @@ class _AdvisorHomePageState extends State<AdvisorHomePage> {
       setState(() {
         _isLoading = false;
       });
+    }
+  }
+
+  Future<void> _showEtfDetailsDialog(String etfCode) async {
+    // Show a loading dialog first
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => const Center(child: CircularProgressIndicator()),
+    );
+
+    try {
+      final response = await http.get(
+        Uri.parse('http://localhost:8080/etf_details/$etfCode'),
+      );
+      
+      // ignore: use_build_context_synchronously
+      Navigator.of(context).pop(); // Close the loading dialog
+
+      if (response.statusCode == 200) {
+        final etfDetails = jsonDecode(utf8.decode(response.bodyBytes));
+        
+        // ignore: use_build_context_synchronously
+        showDialog(
+          context: context,
+          builder: (context) => EtfDetailsDialog(etfDetails: etfDetails),
+        );
+      } else {
+        throw Exception('Failed to load ETF details: ${response.statusCode}');
+      }
+    } catch (e) {
+      // ignore: use_build_context_synchronously
+      Navigator.of(context).pop(); // Close the loading dialog
+      // ignore: use_build_context_synchronously
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error fetching details: $e')),
+      );
     }
   }
 
@@ -204,9 +259,14 @@ class _AdvisorHomePageState extends State<AdvisorHomePage> {
                   ),
                   title: Text('${etf['etf_name']} (${etf['etf_code']})'),
                   subtitle: Text(etf['reason']),
+                  trailing: const Icon(Icons.info_outline),
+                  onTap: () => _showEtfDetailsDialog(etf['etf_code']),
                 ),
               );
             }),
+            const SizedBox(height: 24),
+            if (_aggregatedHoldings != null)
+              _buildAggregatedHoldings(theme),
           ],
         ),
       );
@@ -215,6 +275,29 @@ class _AdvisorHomePageState extends State<AdvisorHomePage> {
       child: Center(
         child: Text('請選擇主題並開始分析。'),
       ),
+    );
+  }
+
+  Widget _buildAggregatedHoldings(ThemeData theme) {
+    return ExpansionTile(
+      title: Text('投資組合總覽 (合併持股)', style: theme.textTheme.headlineSmall),
+      children: [
+        ListView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          itemCount: _aggregatedHoldings!.length,
+          itemBuilder: (context, index) {
+            final holding = _aggregatedHoldings![index];
+            return ListTile(
+              title: Text(holding['name']),
+              trailing: Text(
+                '${holding['weight']}%',
+                style: const TextStyle(fontWeight: FontWeight.bold),
+              ),
+            );
+          },
+        ),
+      ],
     );
   }
 }

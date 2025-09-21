@@ -24,6 +24,8 @@
     -   负责生成最终的投资分析报告。
 -   **向量资料库**: **ChromaDB** (Python)
     -   作为独立的伺服器运行，负责储存和检索 ETF 资料的向量。
+-   **资料来源**: **本地 Excel 檔案** (`scripts/data/etf.xlsx`)
+    -   专案唯一的、权威的资料来源，包含所有 ETF 的属性、因子和持股数据。
 
 ## 启动指南
 
@@ -63,11 +65,14 @@
     build_and_start.bat
     ```
 3.  **在终端机 3**: 启动 Flutter 应用程式
+
+    我们提供了一个方便的互动式脚本来启动前端应用程式。
+
+    **启动方法:**
+
+    在专案根目录下，执行以下指令，然后根据选单提示选择要运行的平台。
     ```bash
-    # 切换到前端专案目录
-    cd etf_advisor_frontend
-    # 运行在您偏好的平台 (例如 chrome, windows, android)
-    flutter run -d chrome
+    start_frontend.bat
     ```
 
 ---
