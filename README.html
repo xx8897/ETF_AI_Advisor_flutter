@@ -1,0 +1,677 @@
+<!DOCTYPE html><html><head>
+<title>README.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/*
+
+Arduino® Light Theme - Stefania Mellai <s.mellai@arduino.cc>
+
+*/
+
+.hljs {
+  display: block;
+  overflow-x: auto;
+  padding: 0.5em;
+  background: #FFFFFF;
+}
+
+.hljs,
+.hljs-subst {
+  color: #434f54;
+}
+
+.hljs-keyword,
+.hljs-attribute,
+.hljs-selector-tag,
+.hljs-doctag,
+.hljs-name {
+  color: #00979D;
+}
+
+.hljs-built_in,
+.hljs-literal,
+.hljs-bullet,
+.hljs-code,
+.hljs-addition {
+  color: #D35400;
+}
+
+.hljs-regexp,
+.hljs-symbol,
+.hljs-variable,
+.hljs-template-variable,
+.hljs-link,
+.hljs-selector-attr,
+.hljs-selector-pseudo {
+  color: #00979D;
+}
+
+.hljs-type,
+.hljs-string,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-quote,
+.hljs-template-tag,
+.hljs-deletion {
+  color: #005C5F;
+}
+
+.hljs-title,
+.hljs-section {
+  color: #880000;
+  font-weight: bold;
+}
+
+.hljs-comment {
+  color: rgba(149,165,166,.8);
+}
+
+.hljs-meta-keyword {
+  color: #728E00;
+}
+
+.hljs-meta {
+  color: #434f54;
+}
+
+.hljs-emphasis {
+  font-style: italic;
+}
+
+.hljs-strong {
+  font-weight: bold;
+}
+
+.hljs-function {
+  color: #728E00;
+}
+
+.hljs-number {
+  color: #8A7B52;  
+}
+
+</style>
+
+<style>
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family:   "HelveticaNeue-Light", sans-serif, "宋体","Segoe WPC", "Segoe UI", "SFUIText-Light","Droid Sans Fallback";
+	font-size: 18px;
+	padding: 0 12px;
+	line-height: 1.6;
+	word-wrap: break-word;
+	color: #333333;
+}
+
+.content-wrapper{
+	max-width: 860px;
+    margin: 0 auto;
+    padding: 0 30px;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	color: #4080D0;
+	text-decoration: none;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom: 1px solid #eee;
+}
+
+
+h2{
+	padding-bottom: .3em;
+    font-size: 2em;
+    line-height: 1.225;
+    border-bottom: 1px solid #eee;
+}
+
+h3{
+	font-size: 1.75em;
+    line-height: 1.225;
+}
+
+h1, h2, h3 {
+	font-weight: bold;
+}
+
+h1 code,
+h2 code,
+h3 code,
+h4 code,
+h5 code,
+h6 code {
+	font-size: inherit;
+	line-height: auto;
+}
+
+a:hover {
+	color: #4080D0;
+	text-decoration: underline;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left: 5px solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 14px;
+	line-height: 19px;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+.mac code {
+	font-size: 12px;
+	line-height: 18px;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+/** Theming */
+
+.vscode-light,
+.vscode-light pre code {
+	color: rgb(30, 30, 30);
+}
+
+.vscode-dark,
+.vscode-dark pre code {
+	color: #DDD;
+}
+
+.vscode-high-contrast,
+.vscode-high-contrast pre code {
+	color: white;
+}
+
+.vscode-light code {
+	color: #A31515;
+}
+
+.vscode-dark code {
+	color: #D7BA7D;
+}
+
+.vscode-light pre:not(.hljs),
+.vscode-light code > div {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre:not(.hljs),
+.vscode-dark code > div {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre:not(.hljs),
+.vscode-high-contrast code > div {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+.vscode-light blockquote,
+.vscode-dark blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.vscode-high-contrast blockquote {
+	background: transparent;
+	border-color: #fff;
+}
+</style>
+
+<style>
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+.table-of-contents li{
+	list-style-type: initial;
+}
+</style>
+
+<style>
+@font-face{font-family:KaTeX_AMS;font-style:normal;font-weight:400;src:url(fonts/KaTeX_AMS-Regular.woff2) format("woff2"),url(fonts/KaTeX_AMS-Regular.woff) format("woff"),url(fonts/KaTeX_AMS-Regular.ttf) format("truetype")}@font-face{font-family:KaTeX_Caligraphic;font-style:normal;font-weight:700;src:url(fonts/KaTeX_Caligraphic-Bold.woff2) format("woff2"),url(fonts/KaTeX_Caligraphic-Bold.woff) format("woff"),url(fonts/KaTeX_Caligraphic-Bold.ttf) format("truetype")}@font-face{font-family:KaTeX_Caligraphic;font-style:normal;font-weight:400;src:url(fonts/KaTeX_Caligraphic-Regular.woff2) format("woff2"),url(fonts/KaTeX_Caligraphic-Regular.woff) format("woff"),url(fonts/KaTeX_Caligraphic-Regular.ttf) format("truetype")}@font-face{font-family:KaTeX_Fraktur;font-style:normal;font-weight:700;src:url(fonts/KaTeX_Fraktur-Bold.woff2) format("woff2"),url(fonts/KaTeX_Fraktur-Bold.woff) format("woff"),url(fonts/KaTeX_Fraktur-Bold.ttf) format("truetype")}@font-face{font-family:KaTeX_Fraktur;font-style:normal;font-weight:400;src:url(fonts/KaTeX_Fraktur-Regular.woff2) format("woff2"),url(fonts/KaTeX_Fraktur-Regular.woff) format("woff"),url(fonts/KaTeX_Fraktur-Regular.ttf) format("truetype")}@font-face{font-family:KaTeX_Main;font-style:normal;font-weight:700;src:url(fonts/KaTeX_Main-Bold.woff2) format("woff2"),url(fonts/KaTeX_Main-Bold.woff) format("woff"),url(fonts/KaTeX_Main-Bold.ttf) format("truetype")}@font-face{font-family:KaTeX_Main;font-style:italic;font-weight:700;src:url(fonts/KaTeX_Main-BoldItalic.woff2) format("woff2"),url(fonts/KaTeX_Main-BoldItalic.woff) format("woff"),url(fonts/KaTeX_Main-BoldItalic.ttf) format("truetype")}@font-face{font-family:KaTeX_Main;font-style:italic;font-weight:400;src:url(fonts/KaTeX_Main-Italic.woff2) format("woff2"),url(fonts/KaTeX_Main-Italic.woff) format("woff"),url(fonts/KaTeX_Main-Italic.ttf) format("truetype")}@font-face{font-family:KaTeX_Main;font-style:normal;font-weight:400;src:url(fonts/KaTeX_Main-Regular.woff2) format("woff2"),url(fonts/KaTeX_Main-Regular.woff) format("woff"),url(fonts/KaTeX_Main-Regular.ttf) format("truetype")}@font-face{font-family:KaTeX_Math;font-style:italic;font-weight:700;src:url(fonts/KaTeX_Math-BoldItalic.woff2) format("woff2"),url(fonts/KaTeX_Math-BoldItalic.woff) format("woff"),url(fonts/KaTeX_Math-BoldItalic.ttf) format("truetype")}@font-face{font-family:KaTeX_Math;font-style:italic;font-weight:400;src:url(fonts/KaTeX_Math-Italic.woff2) format("woff2"),url(fonts/KaTeX_Math-Italic.woff) format("woff"),url(fonts/KaTeX_Math-Italic.ttf) format("truetype")}@font-face{font-family:"KaTeX_SansSerif";font-style:normal;font-weight:700;src:url(fonts/KaTeX_SansSerif-Bold.woff2) format("woff2"),url(fonts/KaTeX_SansSerif-Bold.woff) format("woff"),url(fonts/KaTeX_SansSerif-Bold.ttf) format("truetype")}@font-face{font-family:"KaTeX_SansSerif";font-style:italic;font-weight:400;src:url(fonts/KaTeX_SansSerif-Italic.woff2) format("woff2"),url(fonts/KaTeX_SansSerif-Italic.woff) format("woff"),url(fonts/KaTeX_SansSerif-Italic.ttf) format("truetype")}@font-face{font-family:"KaTeX_SansSerif";font-style:normal;font-weight:400;src:url(fonts/KaTeX_SansSerif-Regular.woff2) format("woff2"),url(fonts/KaTeX_SansSerif-Regular.woff) format("woff"),url(fonts/KaTeX_SansSerif-Regular.ttf) format("truetype")}@font-face{font-family:KaTeX_Script;font-style:normal;font-weight:400;src:url(fonts/KaTeX_Script-Regular.woff2) format("woff2"),url(fonts/KaTeX_Script-Regular.woff) format("woff"),url(fonts/KaTeX_Script-Regular.ttf) format("truetype")}@font-face{font-family:KaTeX_Size1;font-style:normal;font-weight:400;src:url(fonts/KaTeX_Size1-Regular.woff2) format("woff2"),url(fonts/KaTeX_Size1-Regular.woff) format("woff"),url(fonts/KaTeX_Size1-Regular.ttf) format("truetype")}@font-face{font-family:KaTeX_Size2;font-style:normal;font-weight:400;src:url(fonts/KaTeX_Size2-Regular.woff2) format("woff2"),url(fonts/KaTeX_Size2-Regular.woff) format("woff"),url(fonts/KaTeX_Size2-Regular.ttf) format("truetype")}@font-face{font-family:KaTeX_Size3;font-style:normal;font-weight:400;src:url(fonts/KaTeX_Size3-Regular.woff2) format("woff2"),url(fonts/KaTeX_Size3-Regular.woff) format("woff"),url(fonts/KaTeX_Size3-Regular.ttf) format("truetype")}@font-face{font-family:KaTeX_Size4;font-style:normal;font-weight:400;src:url(fonts/KaTeX_Size4-Regular.woff2) format("woff2"),url(fonts/KaTeX_Size4-Regular.woff) format("woff"),url(fonts/KaTeX_Size4-Regular.ttf) format("truetype")}@font-face{font-family:KaTeX_Typewriter;font-style:normal;font-weight:400;src:url(fonts/KaTeX_Typewriter-Regular.woff2) format("woff2"),url(fonts/KaTeX_Typewriter-Regular.woff) format("woff"),url(fonts/KaTeX_Typewriter-Regular.ttf) format("truetype")}.katex{text-rendering:auto;font:normal 1.21em KaTeX_Main,Times New Roman,serif;line-height:1.2;text-indent:0}.katex *{-ms-high-contrast-adjust:none!important;border-color:currentColor}.katex .katex-version:after{content:"0.16.2"}.katex .katex-mathml{clip:rect(1px,1px,1px,1px);border:0;height:1px;overflow:hidden;padding:0;position:absolute;width:1px}.katex .katex-html>.newline{display:block}.katex .base{position:relative;white-space:nowrap;width:-webkit-min-content;width:-moz-min-content;width:min-content}.katex .base,.katex .strut{display:inline-block}.katex .textbf{font-weight:700}.katex .textit{font-style:italic}.katex .textrm{font-family:KaTeX_Main}.katex .textsf{font-family:KaTeX_SansSerif}.katex .texttt{font-family:KaTeX_Typewriter}.katex .mathnormal{font-family:KaTeX_Math;font-style:italic}.katex .mathit{font-family:KaTeX_Main;font-style:italic}.katex .mathrm{font-style:normal}.katex .mathbf{font-family:KaTeX_Main;font-weight:700}.katex .boldsymbol{font-family:KaTeX_Math;font-style:italic;font-weight:700}.katex .amsrm,.katex .mathbb,.katex .textbb{font-family:KaTeX_AMS}.katex .mathcal{font-family:KaTeX_Caligraphic}.katex .mathfrak,.katex .textfrak{font-family:KaTeX_Fraktur}.katex .mathtt{font-family:KaTeX_Typewriter}.katex .mathscr,.katex .textscr{font-family:KaTeX_Script}.katex .mathsf,.katex .textsf{font-family:KaTeX_SansSerif}.katex .mathboldsf,.katex .textboldsf{font-family:KaTeX_SansSerif;font-weight:700}.katex .mathitsf,.katex .textitsf{font-family:KaTeX_SansSerif;font-style:italic}.katex .mainrm{font-family:KaTeX_Main;font-style:normal}.katex .vlist-t{border-collapse:collapse;display:inline-table;table-layout:fixed}.katex .vlist-r{display:table-row}.katex .vlist{display:table-cell;position:relative;vertical-align:bottom}.katex .vlist>span{display:block;height:0;position:relative}.katex .vlist>span>span{display:inline-block}.katex .vlist>span>.pstrut{overflow:hidden;width:0}.katex .vlist-t2{margin-right:-2px}.katex .vlist-s{display:table-cell;font-size:1px;min-width:2px;vertical-align:bottom;width:2px}.katex .vbox{align-items:baseline;display:inline-flex;flex-direction:column}.katex .hbox{width:100%}.katex .hbox,.katex .thinbox{display:inline-flex;flex-direction:row}.katex .thinbox{max-width:0;width:0}.katex .msupsub{text-align:left}.katex .mfrac>span>span{text-align:center}.katex .mfrac .frac-line{border-bottom-style:solid;display:inline-block;width:100%}.katex .hdashline,.katex .hline,.katex .mfrac .frac-line,.katex .overline .overline-line,.katex .rule,.katex .underline .underline-line{min-height:1px}.katex .mspace{display:inline-block}.katex .clap,.katex .llap,.katex .rlap{position:relative;width:0}.katex .clap>.inner,.katex .llap>.inner,.katex .rlap>.inner{position:absolute}.katex .clap>.fix,.katex .llap>.fix,.katex .rlap>.fix{display:inline-block}.katex .llap>.inner{right:0}.katex .clap>.inner,.katex .rlap>.inner{left:0}.katex .clap>.inner>span{margin-left:-50%;margin-right:50%}.katex .rule{border:0 solid;display:inline-block;position:relative}.katex .hline,.katex .overline .overline-line,.katex .underline .underline-line{border-bottom-style:solid;display:inline-block;width:100%}.katex .hdashline{border-bottom-style:dashed;display:inline-block;width:100%}.katex .sqrt>.root{margin-left:.27777778em;margin-right:-.55555556em}.katex .fontsize-ensurer.reset-size1.size1,.katex .sizing.reset-size1.size1{font-size:1em}.katex .fontsize-ensurer.reset-size1.size2,.katex .sizing.reset-size1.size2{font-size:1.2em}.katex .fontsize-ensurer.reset-size1.size3,.katex .sizing.reset-size1.size3{font-size:1.4em}.katex .fontsize-ensurer.reset-size1.size4,.katex .sizing.reset-size1.size4{font-size:1.6em}.katex .fontsize-ensurer.reset-size1.size5,.katex .sizing.reset-size1.size5{font-size:1.8em}.katex .fontsize-ensurer.reset-size1.size6,.katex .sizing.reset-size1.size6{font-size:2em}.katex .fontsize-ensurer.reset-size1.size7,.katex .sizing.reset-size1.size7{font-size:2.4em}.katex .fontsize-ensurer.reset-size1.size8,.katex .sizing.reset-size1.size8{font-size:2.88em}.katex .fontsize-ensurer.reset-size1.size9,.katex .sizing.reset-size1.size9{font-size:3.456em}.katex .fontsize-ensurer.reset-size1.size10,.katex .sizing.reset-size1.size10{font-size:4.148em}.katex .fontsize-ensurer.reset-size1.size11,.katex .sizing.reset-size1.size11{font-size:4.976em}.katex .fontsize-ensurer.reset-size2.size1,.katex .sizing.reset-size2.size1{font-size:.83333333em}.katex .fontsize-ensurer.reset-size2.size2,.katex .sizing.reset-size2.size2{font-size:1em}.katex .fontsize-ensurer.reset-size2.size3,.katex .sizing.reset-size2.size3{font-size:1.16666667em}.katex .fontsize-ensurer.reset-size2.size4,.katex .sizing.reset-size2.size4{font-size:1.33333333em}.katex .fontsize-ensurer.reset-size2.size5,.katex .sizing.reset-size2.size5{font-size:1.5em}.katex .fontsize-ensurer.reset-size2.size6,.katex .sizing.reset-size2.size6{font-size:1.66666667em}.katex .fontsize-ensurer.reset-size2.size7,.katex .sizing.reset-size2.size7{font-size:2em}.katex .fontsize-ensurer.reset-size2.size8,.katex .sizing.reset-size2.size8{font-size:2.4em}.katex .fontsize-ensurer.reset-size2.size9,.katex .sizing.reset-size2.size9{font-size:2.88em}.katex .fontsize-ensurer.reset-size2.size10,.katex .sizing.reset-size2.size10{font-size:3.45666667em}.katex .fontsize-ensurer.reset-size2.size11,.katex .sizing.reset-size2.size11{font-size:4.14666667em}.katex .fontsize-ensurer.reset-size3.size1,.katex .sizing.reset-size3.size1{font-size:.71428571em}.katex .fontsize-ensurer.reset-size3.size2,.katex .sizing.reset-size3.size2{font-size:.85714286em}.katex .fontsize-ensurer.reset-size3.size3,.katex .sizing.reset-size3.size3{font-size:1em}.katex .fontsize-ensurer.reset-size3.size4,.katex .sizing.reset-size3.size4{font-size:1.14285714em}.katex .fontsize-ensurer.reset-size3.size5,.katex .sizing.reset-size3.size5{font-size:1.28571429em}.katex .fontsize-ensurer.reset-size3.size6,.katex .sizing.reset-size3.size6{font-size:1.42857143em}.katex .fontsize-ensurer.reset-size3.size7,.katex .sizing.reset-size3.size7{font-size:1.71428571em}.katex .fontsize-ensurer.reset-size3.size8,.katex .sizing.reset-size3.size8{font-size:2.05714286em}.katex .fontsize-ensurer.reset-size3.size9,.katex .sizing.reset-size3.size9{font-size:2.46857143em}.katex .fontsize-ensurer.reset-size3.size10,.katex .sizing.reset-size3.size10{font-size:2.96285714em}.katex .fontsize-ensurer.reset-size3.size11,.katex .sizing.reset-size3.size11{font-size:3.55428571em}.katex .fontsize-ensurer.reset-size4.size1,.katex .sizing.reset-size4.size1{font-size:.625em}.katex .fontsize-ensurer.reset-size4.size2,.katex .sizing.reset-size4.size2{font-size:.75em}.katex .fontsize-ensurer.reset-size4.size3,.katex .sizing.reset-size4.size3{font-size:.875em}.katex .fontsize-ensurer.reset-size4.size4,.katex .sizing.reset-size4.size4{font-size:1em}.katex .fontsize-ensurer.reset-size4.size5,.katex .sizing.reset-size4.size5{font-size:1.125em}.katex .fontsize-ensurer.reset-size4.size6,.katex .sizing.reset-size4.size6{font-size:1.25em}.katex .fontsize-ensurer.reset-size4.size7,.katex .sizing.reset-size4.size7{font-size:1.5em}.katex .fontsize-ensurer.reset-size4.size8,.katex .sizing.reset-size4.size8{font-size:1.8em}.katex .fontsize-ensurer.reset-size4.size9,.katex .sizing.reset-size4.size9{font-size:2.16em}.katex .fontsize-ensurer.reset-size4.size10,.katex .sizing.reset-size4.size10{font-size:2.5925em}.katex .fontsize-ensurer.reset-size4.size11,.katex .sizing.reset-size4.size11{font-size:3.11em}.katex .fontsize-ensurer.reset-size5.size1,.katex .sizing.reset-size5.size1{font-size:.55555556em}.katex .fontsize-ensurer.reset-size5.size2,.katex .sizing.reset-size5.size2{font-size:.66666667em}.katex .fontsize-ensurer.reset-size5.size3,.katex .sizing.reset-size5.size3{font-size:.77777778em}.katex .fontsize-ensurer.reset-size5.size4,.katex .sizing.reset-size5.size4{font-size:.88888889em}.katex .fontsize-ensurer.reset-size5.size5,.katex .sizing.reset-size5.size5{font-size:1em}.katex .fontsize-ensurer.reset-size5.size6,.katex .sizing.reset-size5.size6{font-size:1.11111111em}.katex .fontsize-ensurer.reset-size5.size7,.katex .sizing.reset-size5.size7{font-size:1.33333333em}.katex .fontsize-ensurer.reset-size5.size8,.katex .sizing.reset-size5.size8{font-size:1.6em}.katex .fontsize-ensurer.reset-size5.size9,.katex .sizing.reset-size5.size9{font-size:1.92em}.katex .fontsize-ensurer.reset-size5.size10,.katex .sizing.reset-size5.size10{font-size:2.30444444em}.katex .fontsize-ensurer.reset-size5.size11,.katex .sizing.reset-size5.size11{font-size:2.76444444em}.katex .fontsize-ensurer.reset-size6.size1,.katex .sizing.reset-size6.size1{font-size:.5em}.katex .fontsize-ensurer.reset-size6.size2,.katex .sizing.reset-size6.size2{font-size:.6em}.katex .fontsize-ensurer.reset-size6.size3,.katex .sizing.reset-size6.size3{font-size:.7em}.katex .fontsize-ensurer.reset-size6.size4,.katex .sizing.reset-size6.size4{font-size:.8em}.katex .fontsize-ensurer.reset-size6.size5,.katex .sizing.reset-size6.size5{font-size:.9em}.katex .fontsize-ensurer.reset-size6.size6,.katex .sizing.reset-size6.size6{font-size:1em}.katex .fontsize-ensurer.reset-size6.size7,.katex .sizing.reset-size6.size7{font-size:1.2em}.katex .fontsize-ensurer.reset-size6.size8,.katex .sizing.reset-size6.size8{font-size:1.44em}.katex .fontsize-ensurer.reset-size6.size9,.katex .sizing.reset-size6.size9{font-size:1.728em}.katex .fontsize-ensurer.reset-size6.size10,.katex .sizing.reset-size6.size10{font-size:2.074em}.katex .fontsize-ensurer.reset-size6.size11,.katex .sizing.reset-size6.size11{font-size:2.488em}.katex .fontsize-ensurer.reset-size7.size1,.katex .sizing.reset-size7.size1{font-size:.41666667em}.katex .fontsize-ensurer.reset-size7.size2,.katex .sizing.reset-size7.size2{font-size:.5em}.katex .fontsize-ensurer.reset-size7.size3,.katex .sizing.reset-size7.size3{font-size:.58333333em}.katex .fontsize-ensurer.reset-size7.size4,.katex .sizing.reset-size7.size4{font-size:.66666667em}.katex .fontsize-ensurer.reset-size7.size5,.katex .sizing.reset-size7.size5{font-size:.75em}.katex .fontsize-ensurer.reset-size7.size6,.katex .sizing.reset-size7.size6{font-size:.83333333em}.katex .fontsize-ensurer.reset-size7.size7,.katex .sizing.reset-size7.size7{font-size:1em}.katex .fontsize-ensurer.reset-size7.size8,.katex .sizing.reset-size7.size8{font-size:1.2em}.katex .fontsize-ensurer.reset-size7.size9,.katex .sizing.reset-size7.size9{font-size:1.44em}.katex .fontsize-ensurer.reset-size7.size10,.katex .sizing.reset-size7.size10{font-size:1.72833333em}.katex .fontsize-ensurer.reset-size7.size11,.katex .sizing.reset-size7.size11{font-size:2.07333333em}.katex .fontsize-ensurer.reset-size8.size1,.katex .sizing.reset-size8.size1{font-size:.34722222em}.katex .fontsize-ensurer.reset-size8.size2,.katex .sizing.reset-size8.size2{font-size:.41666667em}.katex .fontsize-ensurer.reset-size8.size3,.katex .sizing.reset-size8.size3{font-size:.48611111em}.katex .fontsize-ensurer.reset-size8.size4,.katex .sizing.reset-size8.size4{font-size:.55555556em}.katex .fontsize-ensurer.reset-size8.size5,.katex .sizing.reset-size8.size5{font-size:.625em}.katex .fontsize-ensurer.reset-size8.size6,.katex .sizing.reset-size8.size6{font-size:.69444444em}.katex .fontsize-ensurer.reset-size8.size7,.katex .sizing.reset-size8.size7{font-size:.83333333em}.katex .fontsize-ensurer.reset-size8.size8,.katex .sizing.reset-size8.size8{font-size:1em}.katex .fontsize-ensurer.reset-size8.size9,.katex .sizing.reset-size8.size9{font-size:1.2em}.katex .fontsize-ensurer.reset-size8.size10,.katex .sizing.reset-size8.size10{font-size:1.44027778em}.katex .fontsize-ensurer.reset-size8.size11,.katex .sizing.reset-size8.size11{font-size:1.72777778em}.katex .fontsize-ensurer.reset-size9.size1,.katex .sizing.reset-size9.size1{font-size:.28935185em}.katex .fontsize-ensurer.reset-size9.size2,.katex .sizing.reset-size9.size2{font-size:.34722222em}.katex .fontsize-ensurer.reset-size9.size3,.katex .sizing.reset-size9.size3{font-size:.40509259em}.katex .fontsize-ensurer.reset-size9.size4,.katex .sizing.reset-size9.size4{font-size:.46296296em}.katex .fontsize-ensurer.reset-size9.size5,.katex .sizing.reset-size9.size5{font-size:.52083333em}.katex .fontsize-ensurer.reset-size9.size6,.katex .sizing.reset-size9.size6{font-size:.5787037em}.katex .fontsize-ensurer.reset-size9.size7,.katex .sizing.reset-size9.size7{font-size:.69444444em}.katex .fontsize-ensurer.reset-size9.size8,.katex .sizing.reset-size9.size8{font-size:.83333333em}.katex .fontsize-ensurer.reset-size9.size9,.katex .sizing.reset-size9.size9{font-size:1em}.katex .fontsize-ensurer.reset-size9.size10,.katex .sizing.reset-size9.size10{font-size:1.20023148em}.katex .fontsize-ensurer.reset-size9.size11,.katex .sizing.reset-size9.size11{font-size:1.43981481em}.katex .fontsize-ensurer.reset-size10.size1,.katex .sizing.reset-size10.size1{font-size:.24108004em}.katex .fontsize-ensurer.reset-size10.size2,.katex .sizing.reset-size10.size2{font-size:.28929605em}.katex .fontsize-ensurer.reset-size10.size3,.katex .sizing.reset-size10.size3{font-size:.33751205em}.katex .fontsize-ensurer.reset-size10.size4,.katex .sizing.reset-size10.size4{font-size:.38572806em}.katex .fontsize-ensurer.reset-size10.size5,.katex .sizing.reset-size10.size5{font-size:.43394407em}.katex .fontsize-ensurer.reset-size10.size6,.katex .sizing.reset-size10.size6{font-size:.48216008em}.katex .fontsize-ensurer.reset-size10.size7,.katex .sizing.reset-size10.size7{font-size:.57859209em}.katex .fontsize-ensurer.reset-size10.size8,.katex .sizing.reset-size10.size8{font-size:.69431051em}.katex .fontsize-ensurer.reset-size10.size9,.katex .sizing.reset-size10.size9{font-size:.83317261em}.katex .fontsize-ensurer.reset-size10.size10,.katex .sizing.reset-size10.size10{font-size:1em}.katex .fontsize-ensurer.reset-size10.size11,.katex .sizing.reset-size10.size11{font-size:1.19961427em}.katex .fontsize-ensurer.reset-size11.size1,.katex .sizing.reset-size11.size1{font-size:.20096463em}.katex .fontsize-ensurer.reset-size11.size2,.katex .sizing.reset-size11.size2{font-size:.24115756em}.katex .fontsize-ensurer.reset-size11.size3,.katex .sizing.reset-size11.size3{font-size:.28135048em}.katex .fontsize-ensurer.reset-size11.size4,.katex .sizing.reset-size11.size4{font-size:.32154341em}.katex .fontsize-ensurer.reset-size11.size5,.katex .sizing.reset-size11.size5{font-size:.36173633em}.katex .fontsize-ensurer.reset-size11.size6,.katex .sizing.reset-size11.size6{font-size:.40192926em}.katex .fontsize-ensurer.reset-size11.size7,.katex .sizing.reset-size11.size7{font-size:.48231511em}.katex .fontsize-ensurer.reset-size11.size8,.katex .sizing.reset-size11.size8{font-size:.57877814em}.katex .fontsize-ensurer.reset-size11.size9,.katex .sizing.reset-size11.size9{font-size:.69453376em}.katex .fontsize-ensurer.reset-size11.size10,.katex .sizing.reset-size11.size10{font-size:.83360129em}.katex .fontsize-ensurer.reset-size11.size11,.katex .sizing.reset-size11.size11{font-size:1em}.katex .delimsizing.size1{font-family:KaTeX_Size1}.katex .delimsizing.size2{font-family:KaTeX_Size2}.katex .delimsizing.size3{font-family:KaTeX_Size3}.katex .delimsizing.size4{font-family:KaTeX_Size4}.katex .delimsizing.mult .delim-size1>span{font-family:KaTeX_Size1}.katex .delimsizing.mult .delim-size4>span{font-family:KaTeX_Size4}.katex .nulldelimiter{display:inline-block;width:.12em}.katex .delimcenter,.katex .op-symbol{position:relative}.katex .op-symbol.small-op{font-family:KaTeX_Size1}.katex .op-symbol.large-op{font-family:KaTeX_Size2}.katex .accent>.vlist-t,.katex .op-limits>.vlist-t{text-align:center}.katex .accent .accent-body{position:relative}.katex .accent .accent-body:not(.accent-full){width:0}.katex .overlay{display:block}.katex .mtable .vertical-separator{display:inline-block;min-width:1px}.katex .mtable .arraycolsep{display:inline-block}.katex .mtable .col-align-c>.vlist-t{text-align:center}.katex .mtable .col-align-l>.vlist-t{text-align:left}.katex .mtable .col-align-r>.vlist-t{text-align:right}.katex .svg-align{text-align:left}.katex svg{fill:currentColor;stroke:currentColor;fill-rule:nonzero;fill-opacity:1;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;display:block;height:inherit;position:absolute;width:100%}.katex svg path{stroke:none}.katex img{border-style:none;max-height:none;max-width:none;min-height:0;min-width:0}.katex .stretchy{display:block;overflow:hidden;position:relative;width:100%}.katex .stretchy:after,.katex .stretchy:before{content:""}.katex .hide-tail{overflow:hidden;position:relative;width:100%}.katex .halfarrow-left{left:0;overflow:hidden;position:absolute;width:50.2%}.katex .halfarrow-right{overflow:hidden;position:absolute;right:0;width:50.2%}.katex .brace-left{left:0;overflow:hidden;position:absolute;width:25.1%}.katex .brace-center{left:25%;overflow:hidden;position:absolute;width:50%}.katex .brace-right{overflow:hidden;position:absolute;right:0;width:25.1%}.katex .x-arrow-pad{padding:0 .5em}.katex .cd-arrow-pad{padding:0 .55556em 0 .27778em}.katex .mover,.katex .munder,.katex .x-arrow{text-align:center}.katex .boxpad{padding:0 .3em}.katex .fbox,.katex .fcolorbox{border:.04em solid;box-sizing:border-box}.katex .cancel-pad{padding:0 .2em}.katex .cancel-lap{margin-left:-.2em;margin-right:-.2em}.katex .sout{border-bottom-style:solid;border-bottom-width:.08em}.katex .angl{border-right:.049em solid;border-top:.049em solid;box-sizing:border-box;margin-right:.03889em}.katex .anglpad{padding:0 .03889em}.katex .eqn-num:before{content:"(" counter(katexEqnNo) ")";counter-increment:katexEqnNo}.katex .mml-eqn-num:before{content:"(" counter(mmlEqnNo) ")";counter-increment:mmlEqnNo}.katex .mtr-glue{width:50%}.katex .cd-vert-arrow{display:inline-block;position:relative}.katex .cd-label-left{display:inline-block;position:absolute;right:calc(50% + .3em);text-align:left}.katex .cd-label-right{display:inline-block;left:calc(50% + .3em);position:absolute;text-align:right}.katex-display{display:block;margin:1em 0;text-align:center}.katex-display>.katex{display:block;text-align:center;white-space:nowrap}.katex-display>.katex>.katex-html{display:block;position:relative}.katex-display>.katex>.katex-html>.tag{position:absolute;right:0}.katex-display.leqno>.katex>.katex-html>.tag{left:0;right:auto}.katex-display.fleqn>.katex{padding-left:2em;text-align:left}body{counter-reset:katexEqnNo mmlEqnNo}
+
+</style>
+
+</head>
+<body>
+    <div class="content-wrapper">
+        <h1 id="etf-ai-%E6%99%BA%E8%83%BD%E9%A1%A7%E5%95%8F-(flutter-edition)" tabindex="-1">ETF AI 智能顧問 (Flutter Edition)</h1>
+<p>這是一個由 Flutter 和 Dart 驅動的、擁有現代化使用者介面的智慧型 ETF 投資顧問。此應用程式的核心是一個進階的 AI 推薦引擎，它能根據使用者深度客製化的「投資組合 DNA」，為台灣市場的 ETF 提供由 GPT-4o 生成的個人化投資組合建議。</p>
+<hr>
+<h2 id="%E6%A0%B8%E5%BF%83%E5%8A%9F%E8%83%BD" tabindex="-1">核心功能</h2>
+<ul>
+<li><strong>🚀 投資組合 DNA</strong>: 使用者不再只是選擇單一主題，而是可以透過一個引導式的流程，完整地定義自己的投資偏好：
+<ul>
+<li><strong>風險承受度</strong>: 從「保守型」、「穩健型」到「積極型」的清晰選擇。</li>
+<li><strong>主題權重</strong>: 使用滑桿，為「高股息」、「科技/半導體」、「市值型」、「ESG」等主題分配投資權重。</li>
+<li><strong>量化篩選</strong>: (可選) 啟用進階設定，根據 <strong>Beta 值</strong>、<strong>夏普值</strong>等量化指標，對 ETF 進行篩選。</li>
+<li><strong>投資組合規模</strong>: 自訂最終希望推薦的 ETF 數量 (3-8 檔)。</li>
+</ul>
+</li>
+<li><strong>🧠 進階 AI 分析</strong>: 後端採用<strong>動態提示工程 (Dynamic Prompt Engineering)</strong>，將使用者的「投資組合 DNA」轉換為豐富的 AI 指令，驅動 GPT-4o 進行一次真正客製化的、多維度的量化分析。</li>
+<li><strong>📊 圖文並茂的報告</strong>:
+<ul>
+<li><strong>互動式圖表</strong>: 透過圓餅圖，清晰地視覺化 AI 推薦的資產配置比例。</li>
+<li><strong>詳細持股視圖</strong>: 可點擊任一推薦的 ETF，查看其前十大成分股的詳細分佈圖與關鍵指標表格。</li>
+<li><strong>投資組合總覽</strong>: 提供一個可展開的總覽，計算並顯示所有推薦 ETF 合併後，使用者資金在底層持股的最終加權分佈。</li>
+</ul>
+</li>
+<li><strong>✨ 現代化 UI</strong>:
+<ul>
+<li>採用 Flutter 打造，提供流暢、跨平台一致的使用者體驗。</li>
+<li>內建精緻的、靈感來自 VS Code 的專業深色主題，以及乾淨的淺色主題，可隨時切換。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="%E4%BD%BF%E7%94%A8%E8%80%85%E6%95%85%E4%BA%8B" tabindex="-1">使用者故事</h2>
+<blockquote>
+<p><strong>身為一位</strong> 剛接觸投資的小資族 (Alex)，
+<strong>我希望</strong> 能在一個引導式的介面中，表達我「希望穩健、但又不想錯過科技股趨勢」的模糊想法，
+<strong>以便於</strong> 得到一份我能看得懂的、包含 3-4 檔 ETF 的具體投資組合建議，讓我能更有信心地踏出第一步。</p>
+</blockquote>
+<hr>
+<h3 id="%E5%8F%83%E6%95%B8%E8%AA%BF%E6%95%B4%E6%8C%87%E5%8D%97%EF%BC%9A%E5%A6%82%E4%BD%95%E6%89%93%E9%80%A0%E4%BD%A0%E7%9A%84%E5%B0%88%E5%B1%AC%E6%8A%95%E8%B3%87-dna%EF%BC%9F" tabindex="-1">參數調整指南：如何打造你的專屬投資 DNA？</h3>
+<p>調整不同的參數，能讓 AI 更精準地理解你的投資哲學。以下是各項參數的詳細說明，以及它們會如何影響最終的投資組合建議：</p>
+<h4 id="1.-%E9%A2%A8%E9%9A%AA%E6%89%BF%E5%8F%97%E5%BA%A6" tabindex="-1">1. 風險承受度</h4>
+<p>這是你投資策略的基石，決定了 AI 推薦風格的整體方向。</p>
+<ul>
+<li><strong>保守型</strong>:
+<ul>
+<li><strong>說明</strong>: 追求資產的穩定性與可預測性，願意為了較低的風險而接受較低的預期回報。</li>
+<li><strong>AI 行為</strong>: AI 將會<strong>優先選擇</strong>那些<strong>歷史波動度較低</strong>、<strong>Beta 值較低</strong>（例如低於 1），以及<strong>配息較穩定</strong>的 ETF。投資組合可能會更偏重於<strong>非景氣循環</strong>的產業或<strong>債券型</strong>資產。</li>
+</ul>
+</li>
+<li><strong>穩健型</strong>:
+<ul>
+<li><strong>說明</strong>: 尋求風險與回報之間的平衡，願意承受一定的市場波動，以換取跟隨市場大盤成長的機會。</li>
+<li><strong>AI 行為</strong>: AI 將會構建一個<strong>多元化</strong>的投資組合，在成長型（如科技股）和價值型（如高股息）ETF 之間取得平衡，其整體的 Beta 值會趨近於 1。</li>
+</ul>
+</li>
+<li><strong>積極型</strong>:
+<ul>
+<li><strong>說明</strong>: 追求更高的長期回報，願意為此承受顯著的市場波動與短期虧損的風險。</li>
+<li><strong>AI 行為</strong>: AI 將會<strong>更偏重</strong>於那些具有<strong>高成長潛力</strong>的產業（如科技/半導體）、<strong>Beta 值較高</strong>、以及<strong>歷史報酬率更突出</strong>的 ETF，而可能會降低對穩定配息的要求。</li>
+</ul>
+</li>
+</ul>
+<h4 id="2.-%E9%80%B2%E9%9A%8E%E9%87%8F%E5%8C%96%E7%AF%A9%E9%81%B8" tabindex="-1">2. 進階量化篩選</h4>
+<p>啟用進階篩選，能讓你像專業的基金經理人一樣，對投資組合進行更精細的微調。</p>
+<ul>
+<li><strong>Beta 值 (β)</strong>:
+<ul>
+<li><strong>是什麼?</strong>: 衡量一檔 ETF 相對於<strong>整個市場</strong>（大盤）的波動性。Beta 等於 1，代表其波動與大盤同步；大於 1，代表比大盤更劇烈；小於 1，代表比大盤更平穩。</li>
+<li><strong>如何影響結果?</strong>:
+<ul>
+<li><strong>調低 <code>Beta 值上限</code></strong>: AI 將會被<strong>強制</strong>排除掉那些波動劇烈的 ETF，讓你的投資組合整體風格更趨向<strong>保守</strong>或<strong>防禦型</strong>。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>夏普值 (Sharpe Ratio)</strong>:
+<ul>
+<li><strong>是什麼?</strong>: 衡量投資組合<strong>每承受一單位風險，能獲得多少超額回報</strong>的指標。簡單來說，夏普值<strong>越高</strong>，代表這檔 ETF 的「<strong>性價比</strong>」越好。</li>
+<li><strong>如何影響結果?</strong>:
+<ul>
+<li><strong>調高 <code>夏普值下限</code></strong>: AI 將會被<strong>強制</strong>排除掉那些風險回報比不佳的 ETF，聚焦於那些在歷史數據上表現得更「<strong>聰明</strong>」的投資標的。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="3.-%E4%B8%BB%E9%A1%8C%E6%AC%8A%E9%87%8D%E8%88%87%E6%8A%95%E8%B3%87%E7%B5%84%E5%90%88%E8%A6%8F%E6%A8%A1" tabindex="-1">3. 主題權重與投資組合規模</h4>
+<ul>
+<li><strong>主題權重</strong>: 這是你向 AI 表達你對特定產業<strong>信念強度</strong>最直接的方式。如果你將「科技/半導體」的權重設為 70%，AI 就會確保最終推薦的投資組合中，絕大部分的資金都會流向與科技相關的 ETF。</li>
+<li><strong>投資組合規模</strong>: 調整推薦的 ETF 數量，會影響投資組合的<strong>集中度</strong>。
+<ul>
+<li><strong>較少的 ETF (例如 3-4 檔)</strong>: 投資組合會更<strong>集中</strong>，優點是管理方便，缺點是風險也較集中。</li>
+<li><strong>較多的 ETF (例如 5-8 檔)</strong>: 投資組合會更<strong>分散</strong>，更能降低單一 ETF 表現不佳所帶來的衝擊。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="%E6%8A%80%E8%A1%93%E6%9E%B6%E6%A7%8B%E8%88%87-rag-%E6%B5%81%E7%A8%8B" tabindex="-1">技術架構與 RAG 流程</h2>
+<p>本專案採用基於 Dart 和 Python 的微服務架構，其核心是<strong>檢索增強生成 (RAG)</strong> 流程，以確保 AI 的建議是基於真實、準確的數據。</p>
+<pre>Parse error on line 2:
+...ph TD    subgraph A[Flutter Frontend] 
+----------------------^
+Expecting 'SEMI', 'NEWLINE', 'SPACE', 'EOF', 'GRAPH', 'DIR', 'TAGEND', 'TAGSTART', 'UP', 'DOWN', 'subgraph', 'end', 'SQE', 'PE', '-)', 'DIAMOND_STOP', 'MINUS', '--', 'ARROW_POINT', 'ARROW_CIRCLE', 'ARROW_CROSS', 'ARROW_OPEN', 'DOTTED_ARROW_POINT', 'DOTTED_ARROW_CIRCLE', 'DOTTED_ARROW_CROSS', 'DOTTED_ARROW_OPEN', '==', 'THICK_ARROW_POINT', 'THICK_ARROW_CIRCLE', 'THICK_ARROW_CROSS', 'THICK_ARROW_OPEN', 'PIPE', 'STYLE', 'LINKSTYLE', 'CLASSDEF', 'CLASS', 'CLICK', 'DEFAULT', 'NUM', 'PCT', 'COMMA', 'ALPHA', 'COLON', 'BRKT', 'DOT', 'PUNCTUATION', 'UNICODE_TEXT', 'PLUS', 'EQUALS', 'MULT', got 'SQS'</pre><h4 id="%E6%B5%81%E7%A8%8B%E8%AA%AA%E6%98%8E" tabindex="-1">流程說明</h4>
+<ol>
+<li><strong>前端 (Frontend)</strong>: 使用者在 Flutter App 中，設定好個人的「投資組合 DNA」（包含風險偏好、主題權重等），並點擊「開始分析」。</li>
+<li><strong>後端 (Backend)</strong>: Dart Frog 伺服器接收到請求 (<code>/advanced_recommendation</code>)。</li>
+<li><strong>動態提示工程</strong>: 後端根據接收到的「投資組合 DNA」，動態地建立一個獨一無二的、詳細的自然語言提示 (Prompt)。</li>
+<li><strong>RAG 檢索 (Retrieval)</strong>: 這是 RAG 流程的核心，後端在此步驟中為 AI 準備知識庫。
+a.  <strong>建立查詢文本 (Build Query Text)</strong>: 後端首先將使用者的「投資組合 DNA」轉換為一個簡潔的自然語言查詢文本，例如：「為一位穩健型的投資者，尋找關於高股息、科技/半導體的 ETF」。
+b.  <strong>文本向量化 (Request OpenAI Embedding)</strong>: Dart 後端拿著這個<strong>查詢文本</strong>，向 OpenAI 的 Embedding API (e.g., <code>text-embedding-3-small</code>) 發出請求。
+c.  <strong>獲取查詢向量 (Get Query Vector)</strong>: OpenAI 回傳一個高維度的浮點數陣列（向量），這個向量代表了該查詢文本在語意空間中的位置。
+d.  <strong>查詢向量資料庫 (Query ChromaDB)</strong>: Dart 後端最終拿著這個<strong>查詢向量</strong>，向本地運行的 ChromaDB 伺服器發起 HTTP 請求。ChromaDB 會在已儲存的所有 ETF 向量中，執行相似度搜索，找出與查詢向量最接近的幾份 ETF 資料。
+e.  <strong>獲取相關文件 (Get Relevant Docs)</strong>: ChromaDB 將最相關的 ETF 資料（以純文字形式）回傳給 Dart 後端。</li>
+<li><strong>AI 生成</strong>: 後端將<strong>動態提示</strong>和從<strong>資料庫檢索出的資料</strong>，一同發送給 OpenAI GPT-4o，請求其生成分析報告。</li>
+<li><strong>防禦性處理</strong>: 後端在收到 AI 回傳的原始 JSON 後，會進行嚴格的<strong>驗證、清洗和格式統一</strong>，確保其結構永遠符合前端的期望。</li>
+<li><strong>回傳與渲染</strong>: 最終，後端將這個安全、可靠的 JSON 報告回傳給前端，前端的 <code>ResultPage</code> 負責將其渲染成使用者看到的、圖文並茂的互動式報告。</li>
+</ol>
+<h3 id="%E6%8A%80%E8%A1%93%E6%A3%A7-(tech-stack)" tabindex="-1">技術棧 (Tech Stack)</h3>
+<ul>
+<li><strong>前端</strong>: <code>Flutter</code> (Dart) - 打造跨平台的現代化使用者介面。</li>
+<li><strong>後端</strong>: <code>Dart Frog</code> (Dart) - 處理業務 logique 與 API 請求。</li>
+<li><strong>AI 核心</strong>: <code>OpenAI GPT-4o</code> - 負責生成最終的、客製化的投資分析報告。</li>
+<li><strong>向量資料庫</strong>: <code>ChromaDB</code> (Python) - 作為 RAG 的核心，儲存並提供 ETF 數據的向量檢索。</li>
+<li><strong>資料處理層</strong>: <code>Python</code> + <code>Pandas</code> - 負責解析來源 Excel 檔案，並建立向量資料庫。</li>
+</ul>
+<h3 id="%E8%B3%87%E6%96%99%E8%99%95%E7%90%86%E8%88%87-rag-%E6%B5%81%E7%A8%8B%E8%A9%B3%E8%A7%A3" tabindex="-1">資料處理與 RAG 流程詳解</h3>
+<ol>
+<li><strong>資料來源</strong>: 專案所有數據的唯一事實來源是 <code>scripts/data/etf.xlsx</code> 檔案，其中包含了 ETF 的基本資料、量化因子、以及主要持股。</li>
+<li><strong>資料處理</strong>: <code>scripts/build_vector_db.py</code> 腳本負責讀取此 Excel 檔案。對於每一檔 ETF，它會將<strong>所有</strong>的欄位資訊（例如：Beta值、夏普值、主要持股等）整合成一段豐富的文字描述。</li>
+<li><strong>向量化</strong>: 這些豐富的文字描述，隨後被 OpenAI 的 <code>text-embedding-3-small</code> 模型轉換為高維度向量。</li>
+<li><strong>儲存</strong>: 最終，這些能完整代表每一檔 ETF 金融特性的向量，被儲存在 ChromaDB 中，成為 AI 的知識庫。</li>
+<li><strong>檢索與生成</strong>: 當使用者發出分析請求時，後端會：
+a.  將使用者的偏好轉換為一個查詢語句。
+b.  將此查詢語句進行向量化，並在 ChromaDB 中檢索出最相關的幾份 ETF 資料文件。
+c.  將使用者的完整偏好（投資組合 DNA）和檢索出的資料，一同<strong>動態地</strong>組合成一個極其詳細的 Prompt。
+d.  將此 Prompt 發送給 GPT-4o，生成分析報告。</li>
+<li><strong>AI 回應的防禦性處理</strong>: 由於大型語言模型 (LLM) 的輸出格式本質上是不可預測的，我們的 Dart 後端扮演了一個關鍵的<strong>資料轉換與驗證層</strong>角色。在收到 OpenAI 的原始 JSON 回應後，後端會進行嚴格的驗證、清洗和轉換，確保其結構永遠符合前端 App 預期的、穩定的格式（例如，將 <code>portfolio</code> 欄位統一轉換為列表），然後才將最終的、安全的數據回傳給前端。這是確保 App 穩健性的最後一道、也是最重要的一道防線。</li>
+</ol>
+<hr>
+<h2 id="%E6%9E%B6%E6%A7%8B%E6%BC%94%E9%80%B2%E4%B9%8B%E8%B7%AF%EF%BC%9A%E5%BE%9E%E6%8E%A2%E7%B4%A2%E5%88%B0%E6%94%B6%E6%96%82" tabindex="-1">架構演進之路：從探索到收斂</h2>
+<p>本專案當前簡潔的架構，並非一蹴可幾，而是經歷了多次技術探勘、原型驗證與策略迭代後的最終成果。這段歷程是我們寶貴的資產，也證明了當前架構的穩健性。</p>
+<ol>
+<li>
+<p><strong>v0.1 - Python 原型</strong>: 專案最初使用 <code>Python</code> + <code>Streamlit</code> 快速搭建了一個可運作的概念驗證 (PoC) 版本，證明了以 RAG 為核心的 AI 推薦流程是完全可行的。</p>
+</li>
+<li>
+<p><strong>v1.0 - 跨平台轉型</strong>: 為了提供更現代化的使用者體驗，我們將前後端分別用 <code>Dart Frog</code> 和 <code>Flutter</code> 進行了徹底的重寫，奠定了當前微服務的基礎架構。</p>
+</li>
+<li>
+<p><strong>v2.0 - 資料來源的艱難探索</strong>: 這是專案最關鍵、也最曲折的階段。為了擴充 AI 的知識庫，我們進行了大量的資料來源探索：</p>
+<ul>
+<li><strong>API 探勘</strong>: 我們先後嘗試了 <code>FinMind API</code> 的多個版本，以及 <code>台灣證券交易所 (TWSE) OpenAPI</code>。雖然驗證了部分資料的可行性，但最終發現，沒有任何一個單一的 API 來源，能完整提供我們所需的所有核心數據（特別是 ETF 成分股）。</li>
+<li><strong>網頁爬蟲</strong>: 我們接著嘗試了對多個知名財經網站（<code>Goodinfo</code>, <code>MoneyDJ</code>, <code>Wantgoo</code>, <code>MacroMicro</code>）進行網頁爬蟲。但由於現代網站普遍採用了動態載入技術 (Dynamic Loading) 和日趨嚴格的反爬蟲機制，使得直接爬取資料的方案變得極不穩定且技術風險過高。</li>
+<li><strong>第三方函式庫</strong>: 我們也對 <code>yfinance</code> 等第三方資料函式庫進行了仲裁測試，但發現其對於台灣市場的深度資料（如成分股）支援不足。</li>
+</ul>
+</li>
+<li>
+<p><strong>v2.1 - 回歸單一事實來源</strong>: 在窮盡了所有外部資料獲取方案後，專案迎來了最重要的轉折：由使用者提供一份<strong>單一、完整、權威</strong>的 <code>etf.xlsx</code> 資料檔案。這個決策讓我們徹底擺脫了對外部服務不確定性的依賴，將專案的核心資料源，收斂到一個完全可控的本地檔案中。</p>
+</li>
+</ol>
+<p>最終，我們當前這個<strong>以後端資料轉換層為核心、以前端多頁面導航為骨架、以單一本地檔案為事實來源</strong>的簡潔架構，正是這段艱辛探索之路的最終答案。</p>
+<hr>
+<h2 id="%E6%9E%B6%E6%A7%8B%E6%BC%94%E9%80%B2%E4%B9%8B%E8%B7%AF%EF%BC%9A%E5%BE%9E%E6%8E%A2%E7%B4%A2%E5%88%B0%E6%94%B6%E6%96%82-1" tabindex="-1">架構演進之路：從探索到收斂</h2>
+<p>本專案當前簡潔的架構，並非一蹴可幾，而是經歷了多次技術探勘、原型驗證與策略迭代後的最終成果。這段歷程是我們寶貴的資產，也證明了當前架構的穩健性。</p>
+<ol>
+<li>
+<p><strong>v0.1 - Python 原型</strong>: 專案最初使用 <code>Python</code> + <code>Streamlit</code> 快速搭建了一個可運作的概念驗證 (PoC) 版本，證明了以 RAG 為核心的 AI 推薦流程是完全可行的。</p>
+</li>
+<li>
+<p><strong>v1.0 - 跨平台轉型</strong>: 為了提供更現代化的使用者體驗，我們將前後端分別用 <code>Dart Frog</code> 和 <code>Flutter</code> 進行了徹底的重寫，奠定了當前微服務的基礎架構。</p>
+</li>
+<li>
+<p><strong>v2.0 - 資料來源的艱難探索</strong>: 這是專案最關鍵、也最曲折的階段。為了擴充 AI 的知識庫，我們進行了大量的資料來源探索：</p>
+<ul>
+<li><strong>API 探勘</strong>: 我們先後嘗試了 <code>FinMind API</code> 的多個版本，以及 <code>台灣證券交易所 (TWSE) OpenAPI</code>。雖然驗證了部分資料的可行性，但最終發現，沒有任何一個單一的 API 來源，能完整提供我們所需的所有核心數據（特別是 ETF 成分股）。</li>
+<li><strong>網頁爬蟲</strong>: 我們接著嘗試了對多個知名財經網站（<code>Goodinfo</code>, <code>MoneyDJ</code>, <code>Wantgoo</code>, <code>MacroMicro</code>）進行網頁爬蟲。但由於現代網站普遍採用了動態載入技術 (Dynamic Loading) 和日趨嚴格的反爬蟲機制，使得直接爬取資料的方案變得極不穩定且技術風險過高。</li>
+<li><strong>第三方函式庫</strong>: 我們也對 <code>yfinance</code> 等第三方資料函式庫進行了仲裁測試，但發現其對於台灣市場的深度資料（如成分股）支援不足。</li>
+</ul>
+</li>
+<li>
+<p><strong>v2.1 - 回歸單一事實來源</strong>: 在窮盡了所有外部資料獲取方案後，專案迎來了最重要的轉折：由使用者提供一份<strong>單一、完整、權威</strong>的 <code>etf.xlsx</code> 資料檔案。這個決策讓我們徹底擺脫了對外部服務不確定性的依賴，將專案的核心資料源，收斂到一個完全可控的本地檔案中。</p>
+</li>
+</ol>
+<p>最終，我們當前這個<strong>以後端資料轉換層為核心、以前端多頁面導航為骨架、以單一本地檔案為事實來源</strong>的簡潔架構，正是這段艱辛探索之路的最終答案。</p>
+<hr>
+<h2 id="%E6%9C%AA%E4%BE%86%E8%97%8D%E5%9C%96-(future-roadmap)" tabindex="-1">未來藍圖 (Future Roadmap)</h2>
+<p>本專案的進化不會停止。以下是我們已規劃的、下一階段的架構性升級：</p>
+<h3 id="v2.2%3A-%E9%9D%9E%E5%90%8C%E6%AD%A5%E5%88%86%E6%9E%90%E8%88%87%E5%8D%B3%E6%99%82%E6%9B%B4%E6%96%B0" tabindex="-1"><strong>v2.2: 非同步分析與即時更新</strong></h3>
+<ul>
+<li><strong>目標</strong>: 徹底解決 AI 分析時的長等待時間問題，將使用者體驗從「同步等待」升級為「即時通知」。</li>
+<li><strong>計畫</strong>:
+<ul>
+<li><strong>後端</strong>: 將 AI 分析流程重構為<strong>非同步背景任務</strong>。</li>
+<li><strong>通訊</strong>: 引入 <strong>WebSocket</strong>，當背景分析完成後，由伺服器<strong>主動將結果推送</strong>給前端。</li>
+<li><strong>前端</strong>: 實現一個無須等待的 UI，使用者在點擊分析後，可以繼續操作，並在收到推送後，看到即時更新的報告。</li>
+</ul>
+</li>
+</ul>
+<h3 id="v2.3%3A-%E5%B0%8D%E8%A9%B1%E5%BC%8F%E5%BE%AE%E8%AA%BF-(conversational-fine-tuning)" tabindex="-1"><strong>v2.3: 對話式微調 (Conversational Fine-Tuning)</strong></h3>
+<ul>
+<li><strong>目標</strong>: 賦予使用者透過自然語言，對 AI 生成的初步報告進行微調的能力，實現真正的「人機協作」分析。</li>
+<li><strong>計畫</strong>:
+<ul>
+<li><strong>前端</strong>: 在報告頁面新增一個對話輸入框。</li>
+<li><strong>後端</strong>: 升級 AI 推薦引擎，使其能夠理解並執行後續的修改指令（例如：「加入 00878」、「排除所有債券型 ETF」、「我希望台積電的整體佔比再高一點」）。</li>
+<li><strong>AI</strong>: 這需要後端能夠維持一個簡短的對話歷史 (state)，並將使用者的微調指令，動態地融入到下一次的 Prompt 中，要求 AI 在原有基礎上進行修改，而非重新生成。</li>
+</ul>
+</li>
+</ul>
+<h3 id="v3.0%3A-%E9%9B%B2%E7%AB%AF%E9%83%A8%E7%BD%B2%E8%88%87%E5%85%AC%E7%9C%BE%E5%AD%98%E5%8F%96" tabindex="-1"><strong>v3.0: 雲端部署與公眾存取</strong></h3>
+<ul>
+<li><strong>目標</strong>: 將整個應用程式部署到雲端平台 (GCP)，使其成為一個任何人都可以透過網址存取的公開 Web 應用。</li>
+<li><strong>計畫</strong>:
+<ul>
+<li><strong>容器化</strong>: 使用 <strong>Docker</strong> 將 Flutter Web、Dart 後端及 ChromaDB 三個服務，分別打包成獨立的容器。</li>
+<li><strong>部署</strong>: 藉助 <strong>Google Cloud Run</strong> 等現代化的 Serverless 平台，實現應用的自動化部署、擴展與管理。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="%E5%95%9F%E5%8B%95%E6%8C%87%E5%8D%97" tabindex="-1">啟動指南</h2>
+<p>本專案的運行，需要同時啟動兩個獨立的伺服器，和一個 Flutter 應用程式。</p>
+<h3 id="%E7%AC%AC%E4%B8%80%E6%AD%A5%EF%BC%9A%E7%92%B0%E5%A2%83%E8%A8%AD%E5%AE%9A-(%E5%8F%AA%E9%9C%80%E5%9F%B7%E8%A1%8C%E4%B8%80%E6%AC%A1)" tabindex="-1"><strong>第一步：環境設定 (只需執行一次)</strong></h3>
+<ol>
+<li><strong>安裝 Flutter 和 Python</strong>: 確保您的環境中已正確安裝 Flutter SDK 和 Python 3.9+。</li>
+<li><strong>安裝 Python 依賴</strong>: <code>pip install -r requirements.txt</code></li>
+<li><strong>設定環境變數</strong>: 複製 <code>.env.example</code> 為 <code>.env</code>，並填入您自己的 <code>OPENAI_API_KEY</code>。</li>
+</ol>
+<h3 id="%E7%AC%AC%E4%BA%8C%E6%AD%A5%EF%BC%9A%E5%BB%BA%E7%AB%8B%E5%90%91%E9%87%8F%E8%B3%87%E6%96%99%E5%BA%AB-(%E5%8F%AA%E9%9C%80%E5%9F%B7%E8%A1%8C%E4%B8%80%E6%AC%A1)" tabindex="-1"><strong>第二步：建立向量資料庫 (只需執行一次)</strong></h3>
+<ol>
+<li><strong>在終端機 1</strong>: 啟動 ChromaDB 伺服器<pre class="hljs"><code><div><span class="hljs-comment"># 必須在專案根目錄下執行</span>
+chroma run --path chroma_db
+</div></code></pre>
+</li>
+<li><strong>在終端機 2</strong>: 執行資料庫建立腳本<pre class="hljs"><code><div><span class="hljs-comment"># 在專案根目錄下執行</span>
+build_db.bat
+</div></code></pre>
+<em>(完成後，您可以關閉此終端機。)</em></li>
+</ol>
+<h3 id="%E7%AC%AC%E4%B8%89%E6%AD%A5%EF%BC%9A%E6%97%A5%E5%B8%B8%E9%81%8B%E8%A1%8C" tabindex="-1"><strong>第三步：日常運行</strong></h3>
+<ol>
+<li><strong>在終端機 1</strong>: 啟動 ChromaDB 伺服器<pre class="hljs"><code><div><span class="hljs-comment"># 必須在專案根目錄下執行</span>
+chroma run --path chroma_db
+</div></code></pre>
+</li>
+<li><strong>在終端機 2</strong>: 啟動 Dart 後端伺服器<pre class="hljs"><code><div><span class="hljs-comment"># 在專案根目錄下執行</span>
+build_and_start.bat
+</div></code></pre>
+</li>
+<li><strong>在終端機 3</strong>: 啟動 Flutter 應用程式<pre class="hljs"><code><div><span class="hljs-comment"># 在專案根目錄下執行</span>
+start_frontend.bat
+</div></code></pre>
+</li>
+</ol>
+
+    </div>
+
+
+</body></html>

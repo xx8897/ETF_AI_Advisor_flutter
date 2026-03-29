@@ -5,3 +5,4 @@ chromadb
 pandas
 python-dotenv
 openpyxl
+python-pptx

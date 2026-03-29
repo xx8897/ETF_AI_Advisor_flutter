@@ -36,8 +36,10 @@ Future<Response> onRequest(RequestContext context) async {
 
   for (final etf in portfolio) {
     final etfCodeWithSuffix = etf['etf_code'] as String;
-    final etfCode = etfCodeWithSuffix.split('.').first; // Remove .TW suffix
-    final allocation = (etf['allocation'] as num).toDouble() / 100.0;
+    final etfCode = etfCodeWithSuffix.split('.').first;
+    // Safely parse the allocation string to a double
+    final allocationStr = etf['allocation']?.toString() ?? '0.0';
+    final allocation = (double.tryParse(allocationStr) ?? 0.0) / 100.0;
     final holdingsStr = holdingsMap[etfCode];
     print('[Debug] Processing $etfCode with allocation $allocation');
 

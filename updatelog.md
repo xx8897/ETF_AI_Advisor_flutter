@@ -198,3 +198,14 @@
 -   **功能：合併持股呈現 (前端)**: Flutter 前端已完成對接。在 AI 報告生成後，會自動呼叫新的 API，並在報告下方以一個可展開的 `ExpansionTile` 視圖，向使用者清晰地展示其投資組合在底層持股的最終分佈情況。
 -   **整合**: 此功能的完成，實現了一個完整的端對端（Backend + Frontend）的投資組合分析流程。
 ---
+
+### **更新日期: 2025-09-22 (v2.1: 投資組合 DNA 功能完成)**
+**作者**: 全體 Agent 團隊
+**變更檔案**: `dart_backend/routes/advanced_recommendation.dart`, `etf_advisor_frontend/lib/screens/home_page.dart`, `etf_advisor_frontend/lib/screens/result_page.dart`
+
+**說明**:
+-   **里程碑：v2.1 完成**: 成功交付了「投資組合 DNA」的核心功能，將應用從簡單的推薦工具，升級為一個強大的、使用者可深度自訂的智能分析平台。
+-   **後端：進階推薦引擎**: Dart 後端建立了全新的 `/advanced_recommendation` API。此 API 能接收使用者完整的「投資組合 DNA」（包含風險偏好、主題權重、量化篩選等），並透過**動態提示工程**，驅動 GPT-4o 進行一次真正客製化的、多維度的量化分析。
+-   **前端：UI 革命**: Flutter 前端 `HomePage` 被徹底重構為一個多步驟、引導式的設定流程，讓使用者可以直觀地設定其投資偏好。分析結果則在一個獨立的、經過美化的 `ResultPage` 中呈現，確保了流暢且穩定的使用者體驗。
+-   **整合**: 實現了從前端深度客製化，到後端動態分析，再到前端清晰呈現的完整端對端（End-to-End）解決方案。
+---

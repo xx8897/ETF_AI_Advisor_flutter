@@ -2,9 +2,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
-import '../widgets/portfolio_pie_chart.dart';
-import '../widgets/etf_details_dialog.dart';
 import '../providers/theme_provider.dart';
+import './result_page.dart';
 
 class AdvisorHomePage extends StatefulWidget {
   const AdvisorHomePage({super.key});
@@ -14,290 +13,207 @@ class AdvisorHomePage extends StatefulWidget {
 }
 
 class _AdvisorHomePageState extends State<AdvisorHomePage> {
-  final List<String> _availableThemes = [
-    "高股息", "科技/半導體", "市值型", "ESG", "債券型", "低波動"
-  ];
-  final Set<String> _selectedThemes = {};
-
+  int _currentStep = 0;
+  String _riskProfile = '穩健型';
+  double _portfolioSize = 4;
+  final Map<String, double> _themeWeights = {
+    "高股息": 50.0, "科技/半導體": 50.0, "市值型": 0.0, "ESG": 0.0,
+  };
+  bool _useAdvancedFilters = false;
+  double _betaMax = 1.2;
+  double _sharpeMin = 1.5;
   bool _isLoading = false;
-  String? _errorMessage;
-  Map<String, dynamic>? _report;
-  List<Map<String, dynamic>>? _aggregatedHoldings;
-
-  void _onThemeSelected(bool selected, String themeName) {
-    setState(() {
-      if (selected) {
-        _selectedThemes.add(themeName);
-      } else {
-        _selectedThemes.remove(themeName);
-      }
-    });
-  }
 
   Future<void> _startAnalysis() async {
-    setState(() {
-      _isLoading = true;
-      _errorMessage = null;
-      _report = null;
-      _aggregatedHoldings = null; // Clear previous results
-    });
+    setState(() => _isLoading = true);
+
+    final requestBody = {
+      'risk_profile': _riskProfile,
+      'theme_weights': _themeWeights..removeWhere((key, value) => value == 0.0),
+      'filters': _useAdvancedFilters ? {'beta_max': _betaMax, 'sharpe_min': _sharpeMin} : {},
+      'portfolio_size': _portfolioSize.toInt(),
+    };
 
     try {
-      // 1. Get AI recommendation
-      final recommendResponse = await http.post(
-        Uri.parse('http://localhost:8080/recommend'),
+      final response = await http.post(
+        Uri.parse('http://localhost:8080/advanced_recommendation'),
         headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({'themes': _selectedThemes.toList()}),
+        body: jsonEncode(requestBody),
       );
-
-      if (recommendResponse.statusCode == 200) {
-        final report = jsonDecode(utf8.decode(recommendResponse.bodyBytes));
-        final portfolio = (report['report']['portfolio'] as List).cast<Map<String, dynamic>>();
-
-        // 2. Get aggregated holdings for the recommended portfolio
-        final holdingsResponse = await http.post(
-          Uri.parse('http://localhost:8080/portfolio_holdings'),
-          headers: {'Content-Type': 'application/json'},
-          body: jsonEncode({'portfolio': portfolio}),
-        );
-
-        if (holdingsResponse.statusCode == 200) {
-          final holdingsData = jsonDecode(utf8.decode(holdingsResponse.bodyBytes));
-          setState(() {
-            _report = report;
-            _aggregatedHoldings = (holdingsData['portfolio_holdings'] as List).cast<Map<String, dynamic>>();
-          });
-        } else {
-          throw Exception('Failed to load aggregated holdings: ${holdingsResponse.statusCode}');
-        }
-      } else {
-        throw Exception('Failed to get recommendation: ${recommendResponse.statusCode}\n${recommendResponse.body}');
-      }
-    } catch (e) {
-      setState(() {
-        _errorMessage = 'An error occurred: $e';
-      });
-    } finally {
-      setState(() {
-        _isLoading = false;
-      });
-    }
-  }
-
-  Future<void> _showEtfDetailsDialog(String etfCode) async {
-    // Show a loading dialog first
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) => const Center(child: CircularProgressIndicator()),
-    );
-
-    try {
-      final response = await http.get(
-        Uri.parse('http://localhost:8080/etf_details/$etfCode'),
-      );
-      
-      // ignore: use_build_context_synchronously
-      Navigator.of(context).pop(); // Close the loading dialog
 
       if (response.statusCode == 200) {
-        final etfDetails = jsonDecode(utf8.decode(response.bodyBytes));
-        
-        // ignore: use_build_context_synchronously
-        showDialog(
-          context: context,
-          builder: (context) => EtfDetailsDialog(etfDetails: etfDetails),
-        );
+        final report = jsonDecode(utf8.decode(response.bodyBytes));
+        // Navigate to the new result page with the report data
+        Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => ResultPage(report: report),
+        ));
       } else {
-        throw Exception('Failed to load ETF details: ${response.statusCode}');
+        throw Exception('Failed with status ${response.statusCode}: ${response.body}');
       }
     } catch (e) {
-      // ignore: use_build_context_synchronously
-      Navigator.of(context).pop(); // Close the loading dialog
-      // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error fetching details: $e')),
+        SnackBar(content: Text('分析失敗: $e')),
       );
+    } finally {
+      setState(() => _isLoading = false);
     }
   }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
+    return Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [
+            theme.colorScheme.primary.withOpacity(0.1),
+            theme.colorScheme.background,
+          ],
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+        ),
+      ),
+      child: Scaffold(
+        backgroundColor: Colors.transparent, // Make scaffold transparent
+        appBar: AppBar(
+          backgroundColor: Colors.transparent, // Make appbar transparent
+          elevation: 0, // Remove appbar shadow
+          title: const Text('ETF AI Advisor'),
+          actions: [
+            IconButton(
+              icon: Icon(Provider.of<ThemeProvider>(context).themeMode == ThemeMode.dark ? Icons.light_mode : Icons.dark_mode),
+              onPressed: () => Provider.of<ThemeProvider>(context, listen: false).toggleTheme(),
+            ),
+          ],
+        ),
+        body: _isLoading
+            ? const Center(child: CircularProgressIndicator())
+            : _buildStepper(),
+      ),
+    );
+  }
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'ETF AI Advisor',
-          style: theme.textTheme.headlineMedium?.copyWith(color: colorScheme.onPrimary),
-        ),
-        flexibleSpace: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [colorScheme.primary, colorScheme.primary.withOpacity(0.7)],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
-          ),
-        ),
-        actions: [
-          IconButton(
-            icon: Icon(
-              Provider.of<ThemeProvider>(context).themeMode == ThemeMode.dark
-                  ? Icons.light_mode
-                  : Icons.dark_mode,
-            ),
-            onPressed: () {
-              Provider.of<ThemeProvider>(context, listen: false).toggleTheme();
-            },
-          ),
+  Widget _buildStepper() {
+    return SingleChildScrollView(
+      child: Stepper(
+        currentStep: _currentStep,
+        onStepTapped: (step) => setState(() => _currentStep = step),
+        onStepContinue: () {
+          if (_currentStep < 2) {
+            setState(() => _currentStep += 1);
+          } else {
+            _startAnalysis();
+          }
+        },
+        onStepCancel: () {
+          if (_currentStep > 0) {
+            setState(() => _currentStep -= 1);
+          }
+        },
+        steps: [
+          _buildRiskProfileStep(),
+          _buildThemeWeightsStep(),
+          _buildAdvancedFiltersStep(),
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(24.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Card(
-              elevation: 4,
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      '請選擇您感興趣的投資主題:',
-                      style: theme.textTheme.titleLarge,
-                    ),
-                    const SizedBox(height: 16),
-                    Wrap(
-                      spacing: 8.0,
-                      runSpacing: 4.0,
-                      children: _availableThemes.map((theme) {
-                        final isSelected = _selectedThemes.contains(theme);
-                        return FilterChip(
-                          label: Text(theme),
-                          selected: isSelected,
-                          onSelected: (selected) {
-                            _onThemeSelected(selected, theme);
-                          },
-                        );
-                      }).toList(),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            const SizedBox(height: 24),
-            _buildResultArea(),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: _selectedThemes.isEmpty || _isLoading ? null : _startAnalysis,
-        label: const Text('開始分析'),
-        icon: _isLoading
-            ? const SizedBox(
-                height: 24,
-                width: 24,
-                child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
-              )
-            : const Icon(Icons.analytics),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 
-  Widget _buildResultArea() {
-    final theme = Theme.of(context);
-    if (_errorMessage != null) {
-      return Card(
-        color: theme.colorScheme.errorContainer,
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Text(
-            '分析失敗:\n$_errorMessage',
-            style: TextStyle(color: theme.colorScheme.onError),
-            textAlign: TextAlign.center,
+  Step _buildRiskProfileStep() {
+    return Step(
+      title: const Text('步驟一：風險承受度'),
+      content: Column(
+        children: ['保守型', '穩健型', '積極型'].map((profile) {
+          return RadioListTile<String>(
+            title: Text(profile),
+            value: profile,
+            groupValue: _riskProfile,
+            onChanged: (value) => setState(() => _riskProfile = value!),
+          );
+        }).toList(),
+      ),
+      isActive: _currentStep >= 0,
+    );
+  }
+
+  Step _buildThemeWeightsStep() {
+    return Step(
+      title: const Text('步驟二：主題權重'),
+      subtitle: Text('總權重: ${_themeWeights.values.reduce((a, b) => a + b).toStringAsFixed(0)}%'),
+      content: Column(
+        children: _themeWeights.keys.map((theme) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text('$theme (${_themeWeights[theme]!.toStringAsFixed(0)}%)'),
+              Slider(
+                value: _themeWeights[theme]!,
+                min: 0,
+                max: 100,
+                divisions: 20,
+                label: _themeWeights[theme]!.round().toString(),
+                onChanged: (value) {
+                  setState(() {
+                    final total = _themeWeights.values.reduce((a, b) => a + b) - _themeWeights[theme]!;
+                    if (total + value <= 100) {
+                      _themeWeights[theme] = value;
+                    } else {
+                      _themeWeights[theme] = 100 - total;
+                    }
+                  });
+                },
+              ),
+            ],
+          );
+        }).toList(),
+      ),
+      isActive: _currentStep >= 1,
+    );
+  }
+
+  Step _buildAdvancedFiltersStep() {
+    return Step(
+      title: const Text('步驟三：進階設定'),
+      content: Column(
+        children: [
+          Text('投資組合規模 (推薦 ${ _portfolioSize.toInt()} 檔)'),
+          Slider(
+            value: _portfolioSize,
+            min: 3,
+            max: 8,
+            divisions: 5,
+            label: _portfolioSize.toInt().toString(),
+            onChanged: (value) => setState(() => _portfolioSize = value),
           ),
-        ),
-      );
-    }
-    if (_report != null) {
-      final reportData = _report!['report'];
-      final overallAnalysis = reportData['overall_analysis'] as String;
-      final portfolio = (reportData['portfolio'] as List).cast<Map<String, dynamic>>();
-
-      return Expanded(
-        child: ListView(
-          children: [
-            Text('整體分析', style: theme.textTheme.headlineSmall),
-            const SizedBox(height: 8),
-            Text(overallAnalysis),
-            const SizedBox(height: 24),
-            Text('投資組合建議', style: theme.textTheme.headlineSmall),
-            const SizedBox(height: 16),
-            SizedBox(
-              height: 200,
-              child: PortfolioPieChart(portfolio: portfolio),
+          SwitchListTile(
+            title: const Text('啟用量化篩選'),
+            value: _useAdvancedFilters,
+            onChanged: (value) => setState(() => _useAdvancedFilters = value),
+          ),
+          if (_useAdvancedFilters) ...[
+            const Divider(),
+            Text('Beta 值 (篩選低於 ${_betaMax.toStringAsFixed(1)})'),
+            Slider(
+              value: _betaMax,
+              min: 0.5,
+              max: 1.5,
+              divisions: 10,
+              label: _betaMax.toStringAsFixed(1),
+              onChanged: (value) => setState(() => _betaMax = value),
             ),
-            const SizedBox(height: 16),
-            ...portfolio.map((etf) {
-              return Card(
-                margin: const EdgeInsets.symmetric(vertical: 8.0),
-                child: ListTile(
-                  leading: CircleAvatar(
-                    backgroundColor: theme.colorScheme.secondary,
-                    child: Text(
-                      '${etf['allocation']}%',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: theme.colorScheme.onSecondary,
-                      ),
-                    ),
-                  ),
-                  title: Text('${etf['etf_name']} (${etf['etf_code']})'),
-                  subtitle: Text(etf['reason']),
-                  trailing: const Icon(Icons.info_outline),
-                  onTap: () => _showEtfDetailsDialog(etf['etf_code']),
-                ),
-              );
-            }),
-            const SizedBox(height: 24),
-            if (_aggregatedHoldings != null)
-              _buildAggregatedHoldings(theme),
-          ],
-        ),
-      );
-    }
-    return const Expanded(
-      child: Center(
-        child: Text('請選擇主題並開始分析。'),
+            Text('夏普值 (篩選高於 ${_sharpeMin.toStringAsFixed(1)})'),
+            Slider(
+              value: _sharpeMin,
+              min: 0.5,
+              max: 2.5,
+              divisions: 20,
+              label: _sharpeMin.toStringAsFixed(1),
+              onChanged: (value) => setState(() => _sharpeMin = value),
+            ),
+          ]
+        ],
       ),
-    );
-  }
-
-  Widget _buildAggregatedHoldings(ThemeData theme) {
-    return ExpansionTile(
-      title: Text('投資組合總覽 (合併持股)', style: theme.textTheme.headlineSmall),
-      children: [
-        ListView.builder(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          itemCount: _aggregatedHoldings!.length,
-          itemBuilder: (context, index) {
-            final holding = _aggregatedHoldings![index];
-            return ListTile(
-              title: Text(holding['name']),
-              trailing: Text(
-                '${holding['weight']}%',
-                style: const TextStyle(fontWeight: FontWeight.bold),
-              ),
-            );
-          },
-        ),
-      ],
+      isActive: _currentStep >= 2,
     );
   }
 }

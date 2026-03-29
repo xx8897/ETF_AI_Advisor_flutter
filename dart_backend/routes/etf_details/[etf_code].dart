@@ -3,6 +3,8 @@ import 'package:dart_frog/dart_frog.dart';
 import 'package:excel/excel.dart';
 
 Future<Response> onRequest(RequestContext context, String etfCode) async {
+  print('[Debug] Received request for ETF code: $etfCode');
+
   if (context.request.method != HttpMethod.get) {
     return Response(statusCode: HttpStatus.methodNotAllowed);
   }
@@ -62,11 +64,9 @@ Future<Response> onRequest(RequestContext context, String etfCode) async {
       body: 'ETF with code "$etfCode" not found.',
     );
   }
-
-  // Convert CellValue objects to a JSON encodable format (String)
+  
+  // Convert CellValue objects to a JSON encodable format
   final encodableEtfDetails = etfDetails.map((key, cellValue) {
-    // The .toString() method on CellValue and its subtypes provides a 
-    // reasonable string representation for JSON encoding.
     return MapEntry(key, cellValue?.toString());
   });
 
